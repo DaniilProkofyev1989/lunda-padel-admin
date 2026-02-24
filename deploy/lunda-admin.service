@@ -5,9 +5,9 @@ After=network.target
 [Service]
 Type=simple
 User=root
-WorkingDirectory=/opt/lunda_admin
-EnvironmentFile=/opt/lunda_admin/.env
-ExecStart=/opt/lunda_admin/venv/bin/uvicorn admin.app:app --host 0.0.0.0 --port 8000
+WorkingDirectory=/opt/lunda-admin
+EnvironmentFile=/opt/lunda-admin/.env
+ExecStart=/opt/lunda-admin/venv/bin/uvicorn admin.app:app --host 0.0.0.0 --port 8000
 Restart=always
 RestartSec=5
 
