@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Отчёты - Lunda Admin{% endblock %}
+{% block content %}
+<h3 class="mb-4">Отчёты</h3>
+
+<div class="row g-3">
+    <div class="col-md-6">
+        <a href="/reports/2026-03-11" class="text-decoration-none">
+            <div class="card h-100 border-primary">
+                <div class="card-body">
+                    <h5 class="card-title">Обзор рынка турниров падел-Москва</h5>
+                    <p class="text-muted mb-1">11 марта 2026</p>
+                    <p class="card-text small">Полный анализ 2302 турниров за период февраль — июль 2026. Рейтинги организаторов, клубов, грейдов, времён. Лучшие связки. Рекомендации.</p>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-6">
+        <a href="/reports/2026-03-11-clubs" class="text-decoration-none">
+            <div class="card h-100 border-warning">
+                <div class="card-body">
+                    <h5 class="card-title">Анализ клубов: ZVI, Nagatinskaya, Nagatinskaya Premium</h5>
+                    <p class="text-muted mb-1">11 марта 2026</p>
+                    <p class="card-text small">Какие слоты лучше работают в каждом клубе? Лучшие связки день + время + грейд. Рекомендации по расходованию депозитов.</p>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+{% endblock %}

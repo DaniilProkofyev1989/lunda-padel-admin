@@ -3,20 +3,20 @@
         <table class="table table-hover table-sm mb-0">
             <thead class="table-light">
                 <tr>
-                    <th>Date</th>
-                    <th>Type</th>
-                    <th>City</th>
-                    <th>Club</th>
-                    <th>Grade</th>
-                    <th>Status</th>
-                    <th>Players</th>
-                    <th>Price</th>
+                    <th>Дата</th>
+                    <th>Тип</th>
+                    <th>Город</th>
+                    <th>Клуб</th>
+                    <th>Грейд</th>
+                    <th>Статус</th>
+                    <th>Игроки</th>
+                    <th>Цена</th>
                 </tr>
             </thead>
             <tbody>
                 {% for e in events %}
                 <tr style="cursor:pointer" onclick="window.location='/events/{{ e.uid }}'">
-                    <td class="text-nowrap">{{ e.planned_date.strftime('%Y-%m-%d %H:%M') if e.planned_date else '-' }}</td>
+                    <td class="text-nowrap">{{ e.planned_date.strftime('%d.%m.%Y %H:%M') if e.planned_date else '-' }}</td>
                     <td>
                         <span class="badge bg-{% if e.type == 'GAME' %}primary{% else %}info{% endif %}">{{ e.type or '-' }}</span>
                         {% if e.kind %}<small class="text-muted">{{ e.kind }}</small>{% endif %}
@@ -26,15 +26,18 @@
                     <td>{{ e.display_min_grade or '-' }}{% if e.display_max_grade and e.display_max_grade != e.display_min_grade %} - {{ e.display_max_grade }}{% endif %}</td>
                     <td>
                         <span class="badge badge-{{ (e.game_status or 'planned') | lower }}">
-                            {{ e.game_status or '-' }}
+                            {% if e.game_status == 'planned' %}запланирован
+                            {% elif e.game_status == 'finished' %}завершён
+                            {% elif e.game_status == 'cancelled' %}отменён
+                            {% else %}{{ e.game_status or '-' }}{% endif %}
                         </span>
                     </td>
                     <td>{{ e.count_players or 0 }}/{{ e.players_limit or '?' }}</td>
-                    <td>{{ e.price if e.price else '-' }}</td>
+                    <td>{% if e.price %}{{ e.price }} &#8381;{% else %}-{% endif %}</td>
                 </tr>
                 {% endfor %}
                 {% if not events %}
-                <tr><td colspan="8" class="text-center text-muted py-3">No events found</td></tr>
+                <tr><td colspan="8" class="text-center text-muted py-3">Событий не найдено</td></tr>
                 {% endif %}
             </tbody>
         </table>
@@ -45,7 +48,7 @@
 <nav class="mt-3">
     <ul class="pagination pagination-sm justify-content-center">
         {% if page > 1 %}
-        <li class="page-item"><a class="page-link" href="?page={{ page - 1 }}&city={{ current_filters.city }}&status={{ current_filters.status }}&type={{ current_filters.type }}&grade={{ current_filters.grade }}">Prev</a></li>
+        <li class="page-item"><a class="page-link" href="?page={{ page - 1 }}&city={{ current_filters.city }}&status={{ current_filters.status }}&type={{ current_filters.type }}&grade={{ current_filters.grade }}">Назад</a></li>
         {% endif %}
 
         {% for p in range(1, total_pages + 1) %}
@@ -59,7 +62,7 @@
         {% endfor %}
 
         {% if page < total_pages %}
-        <li class="page-item"><a class="page-link" href="?page={{ page + 1 }}&city={{ current_filters.city }}&status={{ current_filters.status }}&type={{ current_filters.type }}&grade={{ current_filters.grade }}">Next</a></li>
+        <li class="page-item"><a class="page-link" href="?page={{ page + 1 }}&city={{ current_filters.city }}&status={{ current_filters.status }}&type={{ current_filters.type }}&grade={{ current_filters.grade }}">Вперёд</a></li>
         {% endif %}
     </ul>
 </nav>

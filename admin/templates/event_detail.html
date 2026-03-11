@@ -1,44 +1,49 @@
 {% extends "base.html" %}
-{% block title %}Event {{ event.uid[:8] }} - Lunda Admin{% endblock %}
+{% block title %}Событие {{ event.uid[:8] }} - Lunda Admin{% endblock %}
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h3>
-        Event
+        Событие
         <span class="badge bg-{% if event.type == 'GAME' %}primary{% else %}info{% endif %}">{{ event.type }}</span>
-        <span class="badge badge-{{ (event.game_status or 'planned') | lower }}">{{ event.game_status }}</span>
+        <span class="badge badge-{{ (event.game_status or 'planned') | lower }}">
+            {% if event.game_status == 'planned' %}запланирован
+            {% elif event.game_status == 'finished' %}завершён
+            {% elif event.game_status == 'cancelled' %}отменён
+            {% else %}{{ event.game_status }}{% endif %}
+        </span>
     </h3>
-    <a href="/events" class="btn btn-outline-secondary btn-sm">Back to list</a>
+    <a href="/events" class="btn btn-outline-secondary btn-sm">&larr; Назад</a>
 </div>
 
 <div class="row g-3 mb-4">
     <div class="col-md-6">
         <div class="card">
-            <div class="card-header fw-bold">Details</div>
+            <div class="card-header fw-bold">Детали</div>
             <div class="card-body">
                 <table class="table table-sm mb-0">
                     <tr><td class="text-muted" style="width:140px">UID</td><td><code>{{ event.uid }}</code></td></tr>
-                    {% if event.title %}<tr><td class="text-muted">Title</td><td>{{ event.title }}</td></tr>{% endif %}
-                    {% if event.description %}<tr><td class="text-muted">Description</td><td>{{ event.description }}</td></tr>{% endif %}
-                    <tr><td class="text-muted">Type</td><td>{{ event.type }}{% if event.kind %} / {{ event.kind }}{% endif %}</td></tr>
-                    <tr><td class="text-muted">Date</td><td>{{ event.planned_date.strftime('%Y-%m-%d %H:%M') if event.planned_date else '-' }}</td></tr>
-                    <tr><td class="text-muted">Duration</td><td>{{ event.duration }} min</td></tr>
-                    <tr><td class="text-muted">Grade</td><td>{{ event.display_min_grade or '-' }} - {{ event.display_max_grade or '-' }}</td></tr>
-                    <tr><td class="text-muted">Price</td><td>{{ event.price if event.price else 'Free' }}</td></tr>
+                    {% if event.title %}<tr><td class="text-muted">Название</td><td>{{ event.title }}</td></tr>{% endif %}
+                    {% if event.description %}<tr><td class="text-muted">Описание</td><td>{{ event.description }}</td></tr>{% endif %}
+                    <tr><td class="text-muted">Тип</td><td>{{ event.type }}{% if event.kind %} / {{ event.kind }}{% endif %}</td></tr>
+                    <tr><td class="text-muted">Дата</td><td>{{ event.planned_date.strftime('%d.%m.%Y %H:%M') if event.planned_date else '-' }}</td></tr>
+                    <tr><td class="text-muted">Длительность</td><td>{{ event.duration }} мин</td></tr>
+                    <tr><td class="text-muted">Грейд</td><td>{{ event.display_min_grade or '-' }} - {{ event.display_max_grade or '-' }}</td></tr>
+                    <tr><td class="text-muted">Цена</td><td>{% if event.price %}{{ event.price }} &#8381;{% else %}бесплатно{% endif %}</td></tr>
                 </table>
             </div>
         </div>
     </div>
     <div class="col-md-6">
         <div class="card">
-            <div class="card-header fw-bold">Location & Players</div>
+            <div class="card-header fw-bold">Место и игроки</div>
             <div class="card-body">
                 <table class="table table-sm mb-0">
-                    <tr><td class="text-muted" style="width:140px">City</td><td>{{ event.city }}</td></tr>
-                    <tr><td class="text-muted">Club</td><td>{{ event.club_name }}</td></tr>
-                    <tr><td class="text-muted">Owner</td><td>{{ event.owner_name }}</td></tr>
-                    <tr><td class="text-muted">Players</td><td>{{ event.count_players or 0 }} / {{ event.players_limit or '?' }}</td></tr>
-                    <tr><td class="text-muted">Ranking</td><td>{{ 'Yes' if event.ranking else 'No' }}</td></tr>
-                    <tr><td class="text-muted">Court Booked</td><td>{{ 'Yes' if event.court_booked else 'No' }}</td></tr>
+                    <tr><td class="text-muted" style="width:140px">Город</td><td>{{ event.city }}</td></tr>
+                    <tr><td class="text-muted">Клуб</td><td>{{ event.club_name }}</td></tr>
+                    <tr><td class="text-muted">Организатор</td><td>{{ event.owner_name }}</td></tr>
+                    <tr><td class="text-muted">Игроки</td><td>{{ event.count_players or 0 }} / {{ event.players_limit or '?' }}</td></tr>
+                    <tr><td class="text-muted">Рейтинговый</td><td>{{ 'Да' if event.ranking else 'Нет' }}</td></tr>
+                    <tr><td class="text-muted">Корт забронирован</td><td>{{ 'Да' if event.court_booked else 'Нет' }}</td></tr>
                 </table>
             </div>
         </div>
@@ -46,13 +51,11 @@
 </div>
 
 <div class="card mb-4">
-    <div class="card-header fw-bold">
-        Metadata
-    </div>
+    <div class="card-header fw-bold">Метаданные</div>
     <div class="card-body">
         <table class="table table-sm mb-0">
-            <tr><td class="text-muted" style="width:140px">First Seen</td><td>{{ event.first_seen.strftime('%Y-%m-%d %H:%M:%S') if event.first_seen else '-' }}</td></tr>
-            <tr><td class="text-muted">Last Updated</td><td>{{ event.last_updated.strftime('%Y-%m-%d %H:%M:%S') if event.last_updated else '-' }}</td></tr>
+            <tr><td class="text-muted" style="width:140px">Первый раз замечен</td><td>{{ event.first_seen.strftime('%d.%m.%Y %H:%M:%S') if event.first_seen else '-' }}</td></tr>
+            <tr><td class="text-muted">Последнее обновление</td><td>{{ event.last_updated.strftime('%d.%m.%Y %H:%M:%S') if event.last_updated else '-' }}</td></tr>
         </table>
     </div>
 </div>
@@ -61,15 +64,13 @@
     <div class="card-header fw-bold d-flex justify-content-between align-items-center">
         Raw JSON
         <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#rawJson">
-            Toggle
+            Показать/скрыть
         </button>
     </div>
     <div class="collapse show" id="rawJson">
         <div class="card-body p-0">
-            <pre class="json m-0 p-3">{{ event.raw_json | tojson(indent=2) }}</pre>
+            <pre class="json-pre m-0 p-3">{{ event.raw_json | tojson(indent=2) }}</pre>
         </div>
     </div>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 {% endblock %}

@@ -1,0 +1,497 @@
+{% extends "base.html" %}
+{% block title %}Анализ клубов: ZVI, Nagatinskaya, Nagatinskaya Premium — Lunda Admin{% endblock %}
+{% block content %}
+<div class="mb-3">
+    <a href="/reports" class="text-muted">&larr; Все отчёты</a>
+</div>
+
+<h3 class="mb-1">Анализ клубов: ZVI, Nagatinskaya, Nagatinskaya Premium</h3>
+<p class="text-muted">11 марта 2026 &middot; Данные за февраль — июль 2026</p>
+
+<div class="alert alert-info">
+    <strong>Контекст:</strong> У Fire Padel League есть депозиты в этих трёх клубах. Цель — определить лучшие слоты (день + время + грейд) для проведения турниров, основываясь на количестве турниров, игроков и ценовой политике.
+</div>
+
+<!-- Общая сводка -->
+<h4 class="mt-4 mb-3">Общая сводка</h4>
+<div class="table-responsive">
+    <table class="table table-bordered sortable-table">
+        <thead class="table-light">
+            <tr>
+                <th>Клуб</th>
+                <th>Турниров</th>
+                <th>Ср. цена</th>
+                <th>Организаторов</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>ZVI padel</td>
+                <td data-sort="44">44</td>
+                <td data-sort="7057">7 057 ₽</td>
+                <td data-sort="6">6</td>
+            </tr>
+            <tr>
+                <td>Padlhub Nagatinskaya</td>
+                <td data-sort="67">67</td>
+                <td data-sort="7008">7 008 ₽</td>
+                <td data-sort="10">10</td>
+            </tr>
+            <tr>
+                <td>Padlhub Nagatinskaya Premium</td>
+                <td data-sort="50">50</td>
+                <td data-sort="5954">5 954 ₽</td>
+                <td data-sort="6">6</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- ==================== ZVI ==================== -->
+<hr class="my-4">
+<h4>ZVI padel</h4>
+<p>44 турнира &middot; Средняя цена 7 057 ₽</p>
+
+<h5 class="mt-3">По дням недели</h5>
+<div class="table-responsive">
+    <table class="table table-sm table-bordered sortable-table">
+        <thead class="table-light">
+            <tr>
+                <th>День</th>
+                <th>Турниров</th>
+                <th>Ср. цена</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="table-success"><td>Сб</td><td data-sort="13">13</td><td data-sort="8402">8 402 ₽</td></tr>
+            <tr><td>Ср</td><td data-sort="9">9</td><td data-sort="5512">5 512 ₽</td></tr>
+            <tr><td>Вс</td><td data-sort="8">8</td><td data-sort="9134">9 134 ₽</td></tr>
+            <tr><td>Пн</td><td data-sort="7">7</td><td data-sort="5507">5 507 ₽</td></tr>
+            <tr><td>Пт</td><td data-sort="4">4</td><td data-sort="5590">5 590 ₽</td></tr>
+            <tr><td>Чт</td><td data-sort="2">2</td><td data-sort="5590">5 590 ₽</td></tr>
+            <tr><td>Вт</td><td data-sort="1">1</td><td data-sort="6500">6 500 ₽</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<h5 class="mt-3">По времени</h5>
+<div class="table-responsive">
+    <table class="table table-sm table-bordered sortable-table">
+        <thead class="table-light">
+            <tr>
+                <th>Время</th>
+                <th>Турниров</th>
+                <th>Ср. цена</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="table-success"><td>20:00</td><td data-sort="18">18</td><td data-sort="5597">5 597 ₽</td></tr>
+            <tr><td>19:00</td><td data-sort="5">5</td><td data-sort="6792">6 792 ₽</td></tr>
+            <tr><td>16:00</td><td data-sort="5">5</td><td data-sort="7552">7 552 ₽</td></tr>
+            <tr><td>15:00</td><td data-sort="4">4</td><td data-sort="5590">5 590 ₽</td></tr>
+            <tr><td>17:00</td><td data-sort="4">4</td><td data-sort="8648">8 648 ₽</td></tr>
+            <tr><td>21:00</td><td data-sort="2">2</td><td data-sort="5590">5 590 ₽</td></tr>
+            <tr><td>18:00</td><td data-sort="2">2</td><td data-sort="9500">9 500 ₽</td></tr>
+            <tr><td>12:00</td><td data-sort="2">2</td><td data-sort="14500">14 500 ₽</td></tr>
+            <tr><td>14:00</td><td data-sort="1">1</td><td data-sort="5900">5 900 ₽</td></tr>
+            <tr><td>10:00</td><td data-sort="1">1</td><td data-sort="16000">16 000 ₽</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<h5 class="mt-3">По грейду</h5>
+<div class="table-responsive">
+    <table class="table table-sm table-bordered sortable-table">
+        <thead class="table-light">
+            <tr>
+                <th>Грейд</th>
+                <th>Турниров</th>
+                <th>% от всех</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="table-success"><td>D</td><td data-sort="35">35</td><td data-sort="79.5">79.5%</td></tr>
+            <tr><td>D+</td><td data-sort="6">6</td><td data-sort="13.6">13.6%</td></tr>
+            <tr><td>C</td><td data-sort="2">2</td><td data-sort="4.5">4.5%</td></tr>
+            <tr><td>C+</td><td data-sort="1">1</td><td data-sort="2.3">2.3%</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<h5 class="mt-3">Топ связок (день + время + грейд)</h5>
+<div class="table-responsive">
+    <table class="table table-sm table-bordered sortable-table">
+        <thead class="table-light">
+            <tr>
+                <th>#</th>
+                <th>Связка</th>
+                <th>Турниров</th>
+                <th>Ср. цена</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="table-success"><td>1</td><td><strong>Ср 20:00 D</strong></td><td data-sort="7">7</td><td data-sort="5519">5 519 ₽</td></tr>
+            <tr><td>2</td><td><strong>Пн 20:00 D</strong></td><td data-sort="4">4</td><td data-sort="5470">5 470 ₽</td></tr>
+            <tr><td>3</td><td><strong>Сб 15:00 D</strong></td><td data-sort="3">3</td><td data-sort="5557">5 557 ₽</td></tr>
+            <tr><td>4</td><td>Сб 16:00 D</td><td data-sort="3">3</td><td data-sort="8793">8 793 ₽</td></tr>
+            <tr><td>5</td><td>Ср 19:00 D</td><td data-sort="2">2</td><td data-sort="5490">5 490 ₽</td></tr>
+            <tr><td>6</td><td>Пт 19:00 D</td><td data-sort="2">2</td><td data-sort="5490">5 490 ₽</td></tr>
+            <tr><td>7</td><td>Вс 16:00 D</td><td data-sort="2">2</td><td data-sort="5690">5 690 ₽</td></tr>
+            <tr><td>8</td><td>Вс 18:00 D</td><td data-sort="2">2</td><td data-sort="9500">9 500 ₽</td></tr>
+            <tr><td>9</td><td>Сб 20:00 D</td><td data-sort="2">2</td><td data-sort="5690">5 690 ₽</td></tr>
+            <tr><td>10</td><td>Пт 20:00 D</td><td data-sort="2">2</td><td data-sort="5690">5 690 ₽</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<h5 class="mt-3">Организаторы в ZVI</h5>
+<div class="table-responsive">
+    <table class="table table-sm table-bordered sortable-table">
+        <thead class="table-light">
+            <tr>
+                <th>Организатор</th>
+                <th>Турниров</th>
+                <th>% от всех</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="table-success"><td>Ikonnikov Timofey</td><td data-sort="18">18</td><td data-sort="40.9">40.9%</td></tr>
+            <tr><td>Prokofev Daniil</td><td data-sort="14">14</td><td data-sort="31.8">31.8%</td></tr>
+            <tr><td>Zemlyanskaya Irina</td><td data-sort="5">5</td><td data-sort="11.4">11.4%</td></tr>
+            <tr><td>Admin GLOBAL PADEL</td><td data-sort="4">4</td><td data-sort="9.1">9.1%</td></tr>
+            <tr><td>Rodnishchev Yaroslav</td><td data-sort="2">2</td><td data-sort="4.5">4.5%</td></tr>
+            <tr><td>Kuzmichev Vadim</td><td data-sort="1">1</td><td data-sort="2.3">2.3%</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="alert alert-success mt-3">
+    <strong>Выводы по ZVI:</strong><br>
+    Суббота — самый популярный день (13 турниров, 29.5%). Грейд D доминирует (79.5%).
+    Основное время — 20:00 (18 турниров, 40.9%). Самая востребованная связка — <strong>Ср 20:00 D</strong> (7 турниров).
+    Ikonnikov Timofey — главный организатор (40.9%), вы — второй (31.8%).
+</div>
+
+<!-- ==================== Nagatinskaya ==================== -->
+<hr class="my-4">
+<h4>Padlhub Nagatinskaya</h4>
+<p>67 турниров &middot; Средняя цена 7 008 ₽</p>
+
+<div class="alert alert-warning">
+    Самый загруженный из трёх клубов (67 турниров), но один организатор занимает 52% слотов.
+</div>
+
+<h5 class="mt-3">По дням недели</h5>
+<div class="table-responsive">
+    <table class="table table-sm table-bordered sortable-table">
+        <thead class="table-light">
+            <tr>
+                <th>День</th>
+                <th>Турниров</th>
+                <th>Ср. цена</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="table-success"><td>Пт</td><td data-sort="20">20</td><td data-sort="6915">6 915 ₽</td></tr>
+            <tr class="table-success"><td>Пн</td><td data-sort="20">20</td><td data-sort="7200">7 200 ₽</td></tr>
+            <tr><td>Ср</td><td data-sort="14">14</td><td data-sort="7071">7 071 ₽</td></tr>
+            <tr><td>Сб</td><td data-sort="5">5</td><td data-sort="8990">8 990 ₽</td></tr>
+            <tr><td>Чт</td><td data-sort="3">3</td><td data-sort="5247">5 247 ₽</td></tr>
+            <tr><td>Вт</td><td data-sort="3">3</td><td data-sort="5530">5 530 ₽</td></tr>
+            <tr><td>Вс</td><td data-sort="2">2</td><td data-sort="5490">5 490 ₽</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<h5 class="mt-3">По времени</h5>
+<div class="table-responsive">
+    <table class="table table-sm table-bordered sortable-table">
+        <thead class="table-light">
+            <tr>
+                <th>Время</th>
+                <th>Турниров</th>
+                <th>Ср. цена</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="table-success"><td>19:00</td><td data-sort="38">38</td><td data-sort="7114">7 114 ₽</td></tr>
+            <tr><td>20:00</td><td data-sort="14">14</td><td data-sort="7107">7 107 ₽</td></tr>
+            <tr><td>21:00</td><td data-sort="5">5</td><td data-sort="5660">5 660 ₽</td></tr>
+            <tr><td>18:00</td><td data-sort="4">4</td><td data-sort="9750">9 750 ₽</td></tr>
+            <tr><td>16:00</td><td data-sort="2">2</td><td data-sort="5490">5 490 ₽</td></tr>
+            <tr><td>14:00</td><td data-sort="2">2</td><td data-sort="5975">5 975 ₽</td></tr>
+            <tr><td>12:00</td><td data-sort="2">2</td><td data-sort="4750">4 750 ₽</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<h5 class="mt-3">По грейду</h5>
+<div class="table-responsive">
+    <table class="table table-sm table-bordered sortable-table">
+        <thead class="table-light">
+            <tr>
+                <th>Грейд</th>
+                <th>Турниров</th>
+                <th>% от всех</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>D+</td><td data-sort="25">25</td><td data-sort="37.3">37.3%</td></tr>
+            <tr class="table-success"><td>D</td><td data-sort="24">24</td><td data-sort="35.8">35.8%</td></tr>
+            <tr><td>C</td><td data-sort="15">15</td><td data-sort="22.4">22.4%</td></tr>
+            <tr><td>C+</td><td data-sort="3">3</td><td data-sort="4.5">4.5%</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<h5 class="mt-3">Топ связок (день + время + грейд)</h5>
+<div class="table-responsive">
+    <table class="table table-sm table-bordered sortable-table">
+        <thead class="table-light">
+            <tr>
+                <th>#</th>
+                <th>Связка</th>
+                <th>Турниров</th>
+                <th>Ср. цена</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="table-success"><td>1</td><td><strong>Пн 19:00 D+</strong></td><td data-sort="8">8</td><td data-sort="8250">8 250 ₽</td></tr>
+            <tr><td>2</td><td><strong>Пт 19:00 D</strong></td><td data-sort="6">6</td><td data-sort="5568">5 568 ₽</td></tr>
+            <tr><td>3</td><td><strong>Пт 19:00 D+</strong></td><td data-sort="6">6</td><td data-sort="10083">10 083 ₽</td></tr>
+            <tr><td>4</td><td>Ср 20:00 D+</td><td data-sort="6">6</td><td data-sort="8250">8 250 ₽</td></tr>
+            <tr><td>5</td><td>Пн 19:00 C</td><td data-sort="6">6</td><td data-sort="7333">7 333 ₽</td></tr>
+            <tr><td>6</td><td>Пт 19:00 C+</td><td data-sort="3">3</td><td data-sort="5490">5 490 ₽</td></tr>
+            <tr><td>7</td><td>Ср 20:00 D</td><td data-sort="3">3</td><td data-sort="5500">5 500 ₽</td></tr>
+            <tr><td>8</td><td>Пт 21:00 D</td><td data-sort="3">3</td><td data-sort="5490">5 490 ₽</td></tr>
+            <tr><td>9</td><td>Сб 18:00 D+</td><td data-sort="3">3</td><td data-sort="11000">11 000 ₽</td></tr>
+            <tr><td>10</td><td>Пт 19:00 C</td><td data-sort="2">2</td><td data-sort="5725">5 725 ₽</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<h5 class="mt-3">Организаторы в Nagatinskaya</h5>
+<div class="table-responsive">
+    <table class="table table-sm table-bordered sortable-table">
+        <thead class="table-light">
+            <tr>
+                <th>Организатор</th>
+                <th>Турниров</th>
+                <th>% от всех</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="table-success"><td>Mokrousova Greta</td><td data-sort="35">35</td><td data-sort="52.2">52.2%</td></tr>
+            <tr><td>Ikonnikov Timofey</td><td data-sort="11">11</td><td data-sort="16.4">16.4%</td></tr>
+            <tr><td>Inyushkina Ekaterina</td><td data-sort="7">7</td><td data-sort="10.4">10.4%</td></tr>
+            <tr><td>Prokofev Daniil</td><td data-sort="5">5</td><td data-sort="7.5">7.5%</td></tr>
+            <tr><td>Pavlechko Artyom</td><td data-sort="2">2</td><td data-sort="3.0">3.0%</td></tr>
+            <tr><td>Gorichev Vladimir</td><td data-sort="1">1</td><td data-sort="1.5">1.5%</td></tr>
+            <tr><td>Dianita Tarutina</td><td data-sort="1">1</td><td data-sort="1.5">1.5%</td></tr>
+            <tr><td>Sufiyarova Evelina</td><td data-sort="1">1</td><td data-sort="1.5">1.5%</td></tr>
+            <tr><td>Sarkisyan Edgar</td><td data-sort="1">1</td><td data-sort="1.5">1.5%</td></tr>
+            <tr><td>Matsutsyn Yan</td><td data-sort="1">1</td><td data-sort="1.5">1.5%</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="alert alert-warning mt-3">
+    <strong>Выводы по Nagatinskaya:</strong><br>
+    Площадка перенасыщена — Mokrousova Greta проводит 52.2% всех турниров (35 из 67).
+    Пятница и понедельник — основные дни (по 20 турниров). 19:00 — доминирующее время (56.7% всех турниров).
+    В отличие от ZVI, здесь более разнообразные грейды: D+ (37.3%), D (35.8%), C (22.4%).
+    Высокая конкуренция за пятничные вечерние слоты.
+</div>
+
+<!-- ==================== Nagatinskaya Premium ==================== -->
+<hr class="my-4">
+<h4>Padlhub Nagatinskaya Premium</h4>
+<p>50 турниров &middot; Средняя цена 5 954 ₽</p>
+
+<div class="alert alert-info">
+    Самая низкая средняя цена из трёх клубов. Более разнообразное расписание по дням и времени.
+</div>
+
+<h5 class="mt-3">По дням недели</h5>
+<div class="table-responsive">
+    <table class="table table-sm table-bordered sortable-table">
+        <thead class="table-light">
+            <tr>
+                <th>День</th>
+                <th>Турниров</th>
+                <th>Ср. цена</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="table-success"><td>Вс</td><td data-sort="17">17</td><td data-sort="6482">6 482 ₽</td></tr>
+            <tr><td>Чт</td><td data-sort="8">8</td><td data-sort="4938">4 938 ₽</td></tr>
+            <tr><td>Пт</td><td data-sort="8">8</td><td data-sort="5155">5 155 ₽</td></tr>
+            <tr><td>Вт</td><td data-sort="8">8</td><td data-sort="5344">5 344 ₽</td></tr>
+            <tr><td>Пн</td><td data-sort="4">4</td><td data-sort="5750">5 750 ₽</td></tr>
+            <tr><td>Ср</td><td data-sort="3">3</td><td data-sort="6333">6 333 ₽</td></tr>
+            <tr><td>Сб</td><td data-sort="2">2</td><td data-sort="11000">11 000 ₽</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<h5 class="mt-3">По времени</h5>
+<div class="table-responsive">
+    <table class="table table-sm table-bordered sortable-table">
+        <thead class="table-light">
+            <tr>
+                <th>Время</th>
+                <th>Турниров</th>
+                <th>Ср. цена</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="table-success"><td>12:00</td><td data-sort="17">17</td><td data-sort="5162">5 162 ₽</td></tr>
+            <tr><td>19:00</td><td data-sort="11">11</td><td data-sort="7317">7 317 ₽</td></tr>
+            <tr><td>16:00</td><td data-sort="6">6</td><td data-sort="5490">5 490 ₽</td></tr>
+            <tr><td>18:00</td><td data-sort="5">5</td><td data-sort="6700">6 700 ₽</td></tr>
+            <tr><td>20:00</td><td data-sort="4">4</td><td data-sort="5500">5 500 ₽</td></tr>
+            <tr><td>17:00</td><td data-sort="3">3</td><td data-sort="5917">5 917 ₽</td></tr>
+            <tr><td>14:00</td><td data-sort="3">3</td><td data-sort="5917">5 917 ₽</td></tr>
+            <tr><td>21:00</td><td data-sort="1">1</td><td data-sort="5500">5 500 ₽</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<h5 class="mt-3">По грейду</h5>
+<div class="table-responsive">
+    <table class="table table-sm table-bordered sortable-table">
+        <thead class="table-light">
+            <tr>
+                <th>Грейд</th>
+                <th>Турниров</th>
+                <th>% от всех</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="table-success"><td>D+</td><td data-sort="25">25</td><td data-sort="50.0">50.0%</td></tr>
+            <tr><td>D</td><td data-sort="18">18</td><td data-sort="36.0">36.0%</td></tr>
+            <tr><td>C</td><td data-sort="4">4</td><td data-sort="8.0">8.0%</td></tr>
+            <tr><td>C+</td><td data-sort="3">3</td><td data-sort="6.0">6.0%</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<h5 class="mt-3">Топ связок (день + время + грейд)</h5>
+<div class="table-responsive">
+    <table class="table table-sm table-bordered sortable-table">
+        <thead class="table-light">
+            <tr>
+                <th>#</th>
+                <th>Связка</th>
+                <th>Турниров</th>
+                <th>Ср. цена</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="table-success"><td>1</td><td><strong>Вс 16:00 D</strong></td><td data-sort="5">5</td><td data-sort="5490">5 490 ₽</td></tr>
+            <tr><td>2</td><td><strong>Пн 12:00 D+</strong></td><td data-sort="3">3</td><td data-sort="4000">4 000 ₽</td></tr>
+            <tr><td>3</td><td><strong>Чт 12:00 D+</strong></td><td data-sort="3">3</td><td data-sort="4000">4 000 ₽</td></tr>
+            <tr><td>4</td><td>Пт 12:00 D+</td><td data-sort="3">3</td><td data-sort="4000">4 000 ₽</td></tr>
+            <tr><td>5</td><td>Сб 12:00 D+</td><td data-sort="2">2</td><td data-sort="11000">11 000 ₽</td></tr>
+            <tr><td>6</td><td>Ср 12:00 D+</td><td data-sort="2">2</td><td data-sort="4000">4 000 ₽</td></tr>
+            <tr><td>7</td><td>Вс 12:00 D</td><td data-sort="2">2</td><td data-sort="6000">6 000 ₽</td></tr>
+            <tr><td>8</td><td>Чт 19:00 D+</td><td data-sort="2">2</td><td data-sort="5500">5 500 ₽</td></tr>
+            <tr><td>9</td><td>Чт 19:00 C</td><td data-sort="2">2</td><td data-sort="5500">5 500 ₽</td></tr>
+            <tr><td>10</td><td>Вс 19:00 C+</td><td data-sort="2">2</td><td data-sort="10000">10 000 ₽</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<h5 class="mt-3">Организаторы в Nagatinskaya Premium</h5>
+<div class="table-responsive">
+    <table class="table table-sm table-bordered sortable-table">
+        <thead class="table-light">
+            <tr>
+                <th>Организатор</th>
+                <th>Турниров</th>
+                <th>% от всех</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="table-success"><td>Sufiyarova Evelina</td><td data-sort="22">22</td><td data-sort="44.0">44.0%</td></tr>
+            <tr><td>Dianita Tarutina</td><td data-sort="10">10</td><td data-sort="20.0">20.0%</td></tr>
+            <tr><td>Ikonnikov Timofey</td><td data-sort="7">7</td><td data-sort="14.0">14.0%</td></tr>
+            <tr><td>Tsomartov Artur</td><td data-sort="7">7</td><td data-sort="14.0">14.0%</td></tr>
+            <tr><td>Kozlenko Sergey</td><td data-sort="2">2</td><td data-sort="4.0">4.0%</td></tr>
+            <tr><td>Inyushkina Ekaterina</td><td data-sort="2">2</td><td data-sort="4.0">4.0%</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="alert alert-success mt-3">
+    <strong>Выводы по Nagatinskaya Premium:</strong><br>
+    Воскресенье — главный день (17 турниров, 34%). 12:00 — доминирующее время (34% всех турниров).
+    D+ — самый популярный грейд (50%). Самая низкая средняя цена среди трёх клубов (5 954 ₽).
+    Паттерн «будни 12:00 D+ за 4 000 ₽» повторяется у нескольких организаторов.
+    Sufiyarova Evelina — главный организатор (44%).
+</div>
+
+<!-- ==================== Итоговые рекомендации ==================== -->
+<hr class="my-4">
+<h4>Сравнение и рекомендации</h4>
+
+<div class="card border-primary mb-3">
+    <div class="card-body">
+        <h5 class="card-title">Характеристики площадок</h5>
+        <ul class="mb-0">
+            <li><strong>ZVI</strong> — грейд D (79.5%), вечернее время 20:00, среда и суббота. Средняя цена 7 057 ₽. Вы уже второй организатор (31.8%).</li>
+            <li><strong>Nagatinskaya</strong> — перенасыщена (67 турниров, один организатор 52%). Пт/Пн 19:00 — основные слоты. Разнообразие грейдов (D+, D, C). Высокая конкуренция.</li>
+            <li><strong>Nagatinskaya Premium</strong> — дневные турниры (12:00), воскресенье, грейд D+ (50%). Самая низкая цена (5 954 ₽). Меньше конкуренции за слоты.</li>
+        </ul>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <h5 class="card-title">Свободные ниши</h5>
+        <ul class="mb-0">
+            <li><strong>ZVI Пт/Чт</strong> — мало турниров (4 и 2), можно занять эти дни.</li>
+            <li><strong>Nagatinskaya Вс</strong> — всего 2 турнира при 67 общих, воскресенье свободно.</li>
+            <li><strong>Premium Сб</strong> — всего 2 турнира, суббота практически пуста.</li>
+            <li><strong>Premium утро/день</strong> — ниша 12:00 D+ за 4 000 ₽ уже занята, но 16:00 D — менее конкурентный слот.</li>
+        </ul>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.sortable-table').forEach(function(table) {
+        const headers = table.querySelectorAll('th');
+        headers.forEach(function(header, index) {
+            header.style.cursor = 'pointer';
+            header.title = 'Нажмите для сортировки';
+            header.addEventListener('click', function() {
+                const tbody = table.querySelector('tbody');
+                const rows = Array.from(tbody.querySelectorAll('tr'));
+                const currentDir = header.dataset.sortDir || 'none';
+                const newDir = currentDir === 'asc' ? 'desc' : 'asc';
+
+                headers.forEach(h => { h.dataset.sortDir = 'none'; h.textContent = h.textContent.replace(/ [▲▼]/g, ''); });
+                header.dataset.sortDir = newDir;
+                header.textContent += newDir === 'asc' ? ' ▲' : ' ▼';
+
+                rows.sort(function(a, b) {
+                    const cellA = a.cells[index];
+                    const cellB = b.cells[index];
+                    let valA = cellA.dataset.sort !== undefined ? parseFloat(cellA.dataset.sort) : cellA.textContent.trim();
+                    let valB = cellB.dataset.sort !== undefined ? parseFloat(cellB.dataset.sort) : cellB.textContent.trim();
+
+                    if (typeof valA === 'number' && typeof valB === 'number') {
+                        return newDir === 'asc' ? valA - valB : valB - valA;
+                    }
+                    return newDir === 'asc' ? String(valA).localeCompare(String(valB), 'ru') : String(valB).localeCompare(String(valA), 'ru');
+                });
+
+                rows.forEach(row => tbody.appendChild(row));
+            });
+        });
+    });
+});
+</script>
+
+{% endblock %}

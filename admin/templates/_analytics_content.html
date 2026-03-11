@@ -1,0 +1,364 @@
+<!-- Chart -->
+<div class="card mb-4">
+    <div class="card-body">
+        <h6 class="mb-3">{{ metric_labels[metric] }} по дням</h6>
+        <canvas id="dailyChart" height="80"></canvas>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<script>
+(function() {
+    const existing = Chart.getChart('dailyChart');
+    if (existing) existing.destroy();
+
+    const metricColors = {
+        count:         { bg: 'rgba(13,110,253,0.6)', border: '#0d6efd' },
+
+        avg_price:     { bg: 'rgba(255,193,7,0.6)',  border: '#ffc107' },
+        total_players: { bg: 'rgba(111,66,193,0.6)', border: '#6f42c1' },
+        avg_players:   { bg: 'rgba(13,202,240,0.6)', border: '#0dcaf0' },
+    };
+    const metric = '{{ metric }}';
+    const colors = metricColors[metric] || metricColors.count;
+
+    new Chart(document.getElementById('dailyChart').getContext('2d'), {
+        type: metric === 'count' || metric === 'total_players' ? 'bar' : 'line',
+        data: {
+            labels: {{ labels | tojson }},
+            datasets: [{
+                label: '{{ metric_labels[metric] }}',
+                data: {{ values | tojson }},
+                backgroundColor: colors.bg,
+                borderColor: colors.border,
+                borderWidth: 2,
+                fill: metric !== 'count' && metric !== 'total_players',
+                tension: 0.3,
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { ticks: { maxRotation: 45 } },
+                y: { beginAtZero: true }
+            }
+        }
+    });
+})();
+</script>
+
+<!-- Summary -->
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="card stat-card primary">
+            <div class="card-body py-2">
+                <div class="text-muted small">Турниров за период</div>
+                <div class="fs-4 fw-bold">{{ ratings.total_tournaments }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card success">
+            <div class="card-body py-2">
+                <div class="text-muted small">Всего игроков</div>
+                <div class="fs-4 fw-bold">{{ ratings.total_players }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Rating tables in tabs -->
+<div class="card">
+    <div class="card-header p-0">
+        <ul class="nav nav-tabs card-header-tabs" role="tablist">
+            <li class="nav-item">
+                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-organizer">Организаторы</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-club">Клубы</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-grade">Грейды</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-hour">По часам</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-dow">По дням недели</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-price">По цене</button>
+            </li>
+        </ul>
+    </div>
+    <div class="card-body p-0">
+        <div class="tab-content">
+
+            {# ---- Macro for sortable table header ---- #}
+            {% macro sort_th(label, col_idx) %}
+            <th class="sortable" data-col="{{ col_idx }}" style="cursor:pointer; user-select:none;">
+                {{ label }} <span class="sort-arrow text-muted">&#8597;</span>
+            </th>
+            {% endmacro %}
+
+            {# ---- Organizers ---- #}
+            <div class="tab-pane fade show active" id="tab-organizer">
+                <div class="table-responsive">
+                    <table class="table table-hover table-sm mb-0 sortable-table">
+                        <thead class="table-light">
+                            <tr>
+                                {{ sort_th('#', 0) }}
+                                {{ sort_th('Организатор', 1) }}
+                                {{ sort_th('Турниров', 2) }}
+                                {{ sort_th('% от всех', 3) }}
+                                {{ sort_th('Игроков', 4) }}
+                                {{ sort_th('% игроков', 5) }}
+                                {{ sort_th('Ср. цена', 6) }}
+                                {{ sort_th('Ср. игроков', 7) }}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for r in ratings.by_organizer %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ r.name }}</td>
+                                <td data-sort="{{ r.tournaments }}">{{ r.tournaments }}</td>
+                                <td data-sort="{{ '%.1f' | format(r.tournaments / ratings.total_tournaments * 100) }}">{{ "%.1f" | format(r.tournaments / ratings.total_tournaments * 100) }}%</td>
+                                <td data-sort="{{ r.total_players or 0 }}">{{ r.total_players or 0 }}</td>
+                                <td data-sort="{{ '%.1f' | format((r.total_players or 0) / ratings.total_players * 100) }}">{{ "%.1f" | format((r.total_players or 0) / ratings.total_players * 100) }}%</td>
+                                <td data-sort="{{ r.avg_price or 0 }}">{{ r.avg_price or '-' }}{% if r.avg_price %} ₽{% endif %}</td>
+                                <td data-sort="{{ r.avg_players or 0 }}">{{ r.avg_players or '-' }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            {# ---- Clubs ---- #}
+            <div class="tab-pane fade" id="tab-club">
+                <div class="table-responsive">
+                    <table class="table table-hover table-sm mb-0 sortable-table">
+                        <thead class="table-light">
+                            <tr>
+                                {{ sort_th('#', 0) }}
+                                {{ sort_th('Клуб', 1) }}
+                                {{ sort_th('Турниров', 2) }}
+                                {{ sort_th('% от всех', 3) }}
+                                {{ sort_th('Игроков', 4) }}
+                                {{ sort_th('% игроков', 5) }}
+                                {{ sort_th('Ср. цена', 6) }}
+                                {{ sort_th('Ср. игроков', 7) }}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for r in ratings.by_club %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ r.name }}</td>
+                                <td data-sort="{{ r.tournaments }}">{{ r.tournaments }}</td>
+                                <td data-sort="{{ '%.1f' | format(r.tournaments / ratings.total_tournaments * 100) }}">{{ "%.1f" | format(r.tournaments / ratings.total_tournaments * 100) }}%</td>
+                                <td data-sort="{{ r.total_players or 0 }}">{{ r.total_players or 0 }}</td>
+                                <td data-sort="{{ '%.1f' | format((r.total_players or 0) / ratings.total_players * 100) }}">{{ "%.1f" | format((r.total_players or 0) / ratings.total_players * 100) }}%</td>
+                                <td data-sort="{{ r.avg_price or 0 }}">{{ r.avg_price or '-' }}{% if r.avg_price %} ₽{% endif %}</td>
+                                <td data-sort="{{ r.avg_players or 0 }}">{{ r.avg_players or '-' }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            {# ---- Grades ---- #}
+            <div class="tab-pane fade" id="tab-grade">
+                <div class="table-responsive">
+                    <table class="table table-hover table-sm mb-0 sortable-table">
+                        <thead class="table-light">
+                            <tr>
+                                {{ sort_th('#', 0) }}
+                                {{ sort_th('Грейд', 1) }}
+                                {{ sort_th('Турниров', 2) }}
+                                {{ sort_th('% от всех', 3) }}
+                                {{ sort_th('Игроков', 4) }}
+                                {{ sort_th('% игроков', 5) }}
+                                {{ sort_th('Ср. цена', 6) }}
+                                {{ sort_th('Ср. игроков', 7) }}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for r in ratings.by_grade %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ r.name }}</td>
+                                <td data-sort="{{ r.tournaments }}">{{ r.tournaments }}</td>
+                                <td data-sort="{{ '%.1f' | format(r.tournaments / ratings.total_tournaments * 100) }}">{{ "%.1f" | format(r.tournaments / ratings.total_tournaments * 100) }}%</td>
+                                <td data-sort="{{ r.total_players or 0 }}">{{ r.total_players or 0 }}</td>
+                                <td data-sort="{{ '%.1f' | format((r.total_players or 0) / ratings.total_players * 100) }}">{{ "%.1f" | format((r.total_players or 0) / ratings.total_players * 100) }}%</td>
+                                <td data-sort="{{ r.avg_price or 0 }}">{{ r.avg_price or '-' }}{% if r.avg_price %} ₽{% endif %}</td>
+                                <td data-sort="{{ r.avg_players or 0 }}">{{ r.avg_players or '-' }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            {# ---- By hour ---- #}
+            <div class="tab-pane fade" id="tab-hour">
+                <div class="table-responsive">
+                    <table class="table table-hover table-sm mb-0 sortable-table">
+                        <thead class="table-light">
+                            <tr>
+                                {{ sort_th('Время', 0) }}
+                                {{ sort_th('Турниров', 1) }}
+                                {{ sort_th('% от всех', 2) }}
+                                {{ sort_th('Игроков', 3) }}
+                                {{ sort_th('% игроков', 4) }}
+                                {{ sort_th('Ср. цена', 5) }}
+                                {{ sort_th('Ср. игроков', 6) }}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for r in ratings.by_hour %}
+                            <tr>
+                                <td data-sort="{{ r.hour }}">{{ r.name }}</td>
+                                <td data-sort="{{ r.tournaments }}">{{ r.tournaments }}</td>
+                                <td data-sort="{{ '%.1f' | format(r.tournaments / ratings.total_tournaments * 100) }}">{{ "%.1f" | format(r.tournaments / ratings.total_tournaments * 100) }}%</td>
+                                <td data-sort="{{ r.total_players or 0 }}">{{ r.total_players or 0 }}</td>
+                                <td data-sort="{{ '%.1f' | format((r.total_players or 0) / ratings.total_players * 100) }}">{{ "%.1f" | format((r.total_players or 0) / ratings.total_players * 100) }}%</td>
+                                <td data-sort="{{ r.avg_price or 0 }}">{{ r.avg_price or '-' }}{% if r.avg_price %} ₽{% endif %}</td>
+                                <td data-sort="{{ r.avg_players or 0 }}">{{ r.avg_players or '-' }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            {# ---- By day of week ---- #}
+            <div class="tab-pane fade" id="tab-dow">
+                <div class="table-responsive">
+                    <table class="table table-hover table-sm mb-0 sortable-table">
+                        <thead class="table-light">
+                            <tr>
+                                {{ sort_th('День недели', 0) }}
+                                {{ sort_th('Турниров', 1) }}
+                                {{ sort_th('% от всех', 2) }}
+                                {{ sort_th('Игроков', 3) }}
+                                {{ sort_th('% игроков', 4) }}
+                                {{ sort_th('Ср. цена', 5) }}
+                                {{ sort_th('Ср. игроков', 6) }}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for r in ratings.by_dow %}
+                            <tr>
+                                <td data-sort="{{ r.dow_sort }}">{{ r.name }}</td>
+                                <td data-sort="{{ r.tournaments }}">{{ r.tournaments }}</td>
+                                <td data-sort="{{ '%.1f' | format(r.tournaments / ratings.total_tournaments * 100) }}">{{ "%.1f" | format(r.tournaments / ratings.total_tournaments * 100) }}%</td>
+                                <td data-sort="{{ r.total_players or 0 }}">{{ r.total_players or 0 }}</td>
+                                <td data-sort="{{ '%.1f' | format((r.total_players or 0) / ratings.total_players * 100) }}">{{ "%.1f" | format((r.total_players or 0) / ratings.total_players * 100) }}%</td>
+                                <td data-sort="{{ r.avg_price or 0 }}">{{ r.avg_price or '-' }}{% if r.avg_price %} ₽{% endif %}</td>
+                                <td data-sort="{{ r.avg_players or 0 }}">{{ r.avg_players or '-' }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            {# ---- By price range ---- #}
+            <div class="tab-pane fade" id="tab-price">
+                <div class="table-responsive">
+                    <table class="table table-hover table-sm mb-0 sortable-table">
+                        <thead class="table-light">
+                            <tr>
+                                {{ sort_th('Ценовой диапазон', 0) }}
+                                {{ sort_th('Турниров', 1) }}
+                                {{ sort_th('% от всех', 2) }}
+                                {{ sort_th('Игроков', 3) }}
+                                {{ sort_th('% игроков', 4) }}
+                                {{ sort_th('Ср. цена', 5) }}
+                                {{ sort_th('Ср. игроков', 6) }}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for r in ratings.by_price %}
+                            <tr>
+                                <td data-sort="{{ r.sort_order }}">{{ r.name }}</td>
+                                <td data-sort="{{ r.tournaments }}">{{ r.tournaments }}</td>
+                                <td data-sort="{{ '%.1f' | format(r.tournaments / ratings.total_tournaments * 100) }}">{{ "%.1f" | format(r.tournaments / ratings.total_tournaments * 100) }}%</td>
+                                <td data-sort="{{ r.total_players or 0 }}">{{ r.total_players or 0 }}</td>
+                                <td data-sort="{{ '%.1f' | format((r.total_players or 0) / ratings.total_players * 100) }}">{{ "%.1f" | format((r.total_players or 0) / ratings.total_players * 100) }}%</td>
+                                <td data-sort="{{ r.avg_price or 0 }}">{{ r.avg_price or '-' }}{% if r.avg_price %} ₽{% endif %}</td>
+                                <td data-sort="{{ r.avg_players or 0 }}">{{ r.avg_players or '-' }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Sortable tables JS -->
+<script>
+(function() {
+    document.querySelectorAll('.sortable-table').forEach(table => {
+        const headers = table.querySelectorAll('th.sortable');
+        headers.forEach(th => {
+            th.addEventListener('click', function() {
+                const colIdx = parseInt(this.dataset.col);
+                const tbody = table.querySelector('tbody');
+                const rows = Array.from(tbody.querySelectorAll('tr'));
+                const arrow = this.querySelector('.sort-arrow');
+
+                // Determine sort direction
+                const currentDir = this.dataset.sortDir || '';
+                const newDir = currentDir === 'asc' ? 'desc' : 'asc';
+
+                // Reset all arrows in this table
+                table.querySelectorAll('th.sortable').forEach(h => {
+                    h.dataset.sortDir = '';
+                    h.querySelector('.sort-arrow').innerHTML = '&#8597;';
+                    h.querySelector('.sort-arrow').className = 'sort-arrow text-muted';
+                });
+
+                this.dataset.sortDir = newDir;
+                arrow.innerHTML = newDir === 'asc' ? '&#9650;' : '&#9660;';
+                arrow.className = 'sort-arrow text-primary';
+
+                rows.sort((a, b) => {
+                    const cellA = a.cells[colIdx];
+                    const cellB = b.cells[colIdx];
+                    let valA = cellA.dataset.sort !== undefined ? cellA.dataset.sort : cellA.textContent.trim();
+                    let valB = cellB.dataset.sort !== undefined ? cellB.dataset.sort : cellB.textContent.trim();
+
+                    // Try numeric comparison
+                    const numA = parseFloat(valA);
+                    const numB = parseFloat(valB);
+                    if (!isNaN(numA) && !isNaN(numB)) {
+                        return newDir === 'asc' ? numA - numB : numB - numA;
+                    }
+                    // String comparison
+                    return newDir === 'asc'
+                        ? valA.localeCompare(valB, 'ru')
+                        : valB.localeCompare(valA, 'ru');
+                });
+
+                // Re-number rows (update # column)
+                rows.forEach((row, i) => {
+                    tbody.appendChild(row);
+                    // Update row number if first column is a plain number
+                    if (row.cells[0] && !row.cells[0].dataset.sort && /^\d+$/.test(row.cells[0].textContent.trim())) {
+                        row.cells[0].textContent = i + 1;
+                    }
+                });
+            });
+        });
+    });
+})();
+</script>

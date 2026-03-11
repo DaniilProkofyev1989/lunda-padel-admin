@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Аналитика - Lunda Admin{% endblock %}
+{% block content %}
+<h3 class="mb-3">Аналитика</h3>
+
+<div class="card mb-3">
+    <div class="card-body py-2">
+        <form id="analytics-form"
+              hx-get="/analytics"
+              hx-target="#analytics-content"
+              hx-push-url="true">
+            <div class="row g-2 align-items-end">
+                <div class="col-auto">
+                    <label class="form-label small mb-0">Дата с</label>
+                    <input type="date" name="date_from" class="form-control form-control-sm"
+                           value="{{ date_from }}">
+                </div>
+                <div class="col-auto">
+                    <label class="form-label small mb-0">Дата по</label>
+                    <input type="date" name="date_to" class="form-control form-control-sm"
+                           value="{{ date_to }}">
+                </div>
+                <div class="col-auto">
+                    <label class="form-label small mb-0">Метрика графика</label>
+                    <select name="metric" class="form-select form-select-sm">
+                        {% for key, label in metric_labels.items() %}
+                        <option value="{{ key }}" {% if key == metric %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary btn-sm">Показать</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="analytics-content">
+    {% include "_analytics_content.html" %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+{% endblock %}

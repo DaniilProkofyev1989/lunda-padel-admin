@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}Турниры - Lunda Admin{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>Турниры <span class="text-muted fs-6">({{ total }})</span></h3>
+</div>
+
+<div class="card mb-3">
+    <div class="card-body py-2">
+        <form class="row g-2 align-items-end"
+              hx-get="/tournaments"
+              hx-target="#tournaments-table"
+              hx-push-url="true">
+            <div class="col-auto">
+                <label class="form-label small mb-0">Дата с</label>
+                <input type="date" name="date_from" class="form-control form-control-sm"
+                       value="{{ current_filters.date_from }}">
+            </div>
+            <div class="col-auto">
+                <label class="form-label small mb-0">Дата по</label>
+                <input type="date" name="date_to" class="form-control form-control-sm"
+                       value="{{ current_filters.date_to }}">
+            </div>
+            <div class="col-auto">
+                <label class="form-label small mb-0">Город</label>
+                <select name="city" class="form-select form-select-sm">
+                    <option value="">Все</option>
+                    {% for c in filters.cities %}
+                    <option value="{{ c }}" {% if current_filters.city == c %}selected{% endif %}>{{ c }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-auto">
+                <label class="form-label small mb-0">Статус</label>
+                <select name="status" class="form-select form-select-sm">
+                    <option value="">Все</option>
+                    {% for s in filters.statuses %}
+                    <option value="{{ s }}" {% if current_filters.status == s %}selected{% endif %}>{{ s }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-auto">
+                <label class="form-label small mb-0">Грейд</label>
+                <select name="grade" class="form-select form-select-sm">
+                    <option value="">Все</option>
+                    {% for g in filters.grades %}
+                    <option value="{{ g }}" {% if current_filters.grade == g %}selected{% endif %}>{{ g }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-auto">
+                <label class="form-label small mb-0">Клуб</label>
+                <select name="club" class="form-select form-select-sm">
+                    <option value="">Все</option>
+                    {% for c in filters.clubs %}
+                    <option value="{{ c }}" {% if current_filters.club == c %}selected{% endif %}>{{ c }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-auto">
+                <label class="form-label small mb-0">Организатор</label>
+                <select name="owner" class="form-select form-select-sm">
+                    <option value="">Все</option>
+                    {% for o in filters.owners %}
+                    <option value="{{ o }}" {% if current_filters.owner == o %}selected{% endif %}>{{ o }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-auto">
+                <label class="form-label small mb-0">Цена от</label>
+                <input type="number" name="price_min" class="form-control form-control-sm" style="width:80px"
+                       value="{{ current_filters.price_min }}" placeholder="0">
+            </div>
+            <div class="col-auto">
+                <label class="form-label small mb-0">Цена до</label>
+                <input type="number" name="price_max" class="form-control form-control-sm" style="width:80px"
+                       value="{{ current_filters.price_max }}" placeholder="99999">
+            </div>
+            <input type="hidden" name="sort" value="{{ current_filters.sort }}">
+            <input type="hidden" name="sort_dir" value="{{ current_filters.sort_dir }}">
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary btn-sm">Фильтр</button>
+                <a href="/tournaments" class="btn btn-outline-secondary btn-sm">Сбросить</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="tournaments-table">
+    {% include "_tournaments_table.html" %}
+</div>
+{% endblock %}

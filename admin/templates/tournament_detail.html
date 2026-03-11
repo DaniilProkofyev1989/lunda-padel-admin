@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% block title %}{{ event.title or 'Турнир' }} - Lunda Admin{% endblock %}
+{% block content %}
+<div class="mb-3">
+    <a href="/tournaments" class="btn btn-outline-secondary btn-sm">&larr; Назад к турнирам</a>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">{{ event.title or event.kind or 'Турнир' }}</h5>
+        <span class="badge badge-{{ (event.game_status or 'planned') | lower }}">
+            {% if event.game_status == 'planned' %}запланирован
+            {% elif event.game_status == 'finished' %}завершён
+            {% elif event.game_status == 'cancelled' %}отменён
+            {% else %}{{ event.game_status or '-' }}{% endif %}
+        </span>
+    </div>
+    <div class="card-body">
+        {% if event.description %}
+        <p class="text-muted mb-3">{{ event.description }}</p>
+        {% endif %}
+        <div class="row">
+            <div class="col-md-6">
+                <table class="table table-sm">
+                    <tr><td class="text-muted" style="width:140px">Дата и время</td><td>{{ event.planned_date.strftime('%d.%m.%Y %H:%M') if event.planned_date else '-' }}</td></tr>
+                    <tr><td class="text-muted">Тип</td><td>{{ event.kind or '-' }}</td></tr>
+                    <tr><td class="text-muted">Грейд</td><td>{{ event.display_min_grade or '-' }}{% if event.display_max_grade and event.display_max_grade != event.display_min_grade %} - {{ event.display_max_grade }}{% endif %}</td></tr>
+                    <tr><td class="text-muted">Цена</td><td>{% if event.price %}{{ event.price }} &#8381;{% else %}бесплатно{% endif %}</td></tr>
+                    <tr><td class="text-muted">Рейтинговый</td><td>{{ 'Да' if event.ranking else 'Нет' }}</td></tr>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <table class="table table-sm">
+                    <tr><td class="text-muted" style="width:140px">Клуб</td><td>{{ event.club_name or '-' }}</td></tr>
+                    <tr><td class="text-muted">Город</td><td>{{ event.city or '-' }}</td></tr>
+                    <tr><td class="text-muted">Организатор</td><td>{{ event.owner_name or '-' }}</td></tr>
+                    <tr><td class="text-muted">Игроки</td><td>{{ event.count_players or 0 }} / {{ event.players_limit or '?' }}</td></tr>
+                    <tr><td class="text-muted">Корт забронирован</td><td>{{ 'Да' if event.court_booked else 'Нет' }}</td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if history %}
+<div class="card mb-3">
+    <div class="card-header">
+        <h6 class="mb-0">История заполняемости</h6>
+    </div>
+    <div class="card-body">
+        <canvas id="historyChart" height="200"></canvas>
+        <table class="table table-sm mt-3">
+            <thead class="table-light">
+                <tr><th>Дата</th><th>Игроки</th><th>Статус</th></tr>
+            </thead>
+            <tbody>
+                {% for s in history %}
+                <tr>
+                    <td>{{ s.scraped_at.strftime('%d.%m.%Y %H:%M') }}</td>
+                    <td>{{ s.count_players if s.count_players is not none else '-' }}</td>
+                    <td>
+                        {% if s.game_status == 'planned' %}запланирован
+                        {% elif s.game_status == 'finished' %}завершён
+                        {% elif s.game_status == 'cancelled' %}отменён
+                        {% else %}{{ s.game_status or '-' }}{% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<script>
+const ctx = document.getElementById('historyChart').getContext('2d');
+new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: [{% for s in history %}'{{ s.scraped_at.strftime("%d.%m %H:%M") }}'{% if not loop.last %},{% endif %}{% endfor %}],
+        datasets: [{
+            label: 'Игроки',
+            data: [{% for s in history %}{{ s.count_players if s.count_players is not none else 'null' }}{% if not loop.last %},{% endif %}{% endfor %}],
+            borderColor: '#0d6efd',
+            backgroundColor: 'rgba(13,110,253,0.1)',
+            fill: true,
+            tension: 0.3,
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+            y: { beginAtZero: true, ticks: { stepSize: 1 } }
+        }
+    }
+});
+</script>
+{% else %}
+<div class="card mb-3">
+    <div class="card-body text-center text-muted">
+        <p>История заполняемости пока недоступна. Данные начнут собираться автоматически.</p>
+    </div>
+</div>
+{% endif %}
+
+<div class="card mb-3">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h6 class="mb-0">Метаданные</h6>
+    </div>
+    <div class="card-body">
+        <small class="text-muted">
+            Первый раз замечен: {{ event.first_seen.strftime('%d.%m.%Y %H:%M') if event.first_seen else '-' }} |
+            Последнее обновление: {{ event.last_updated.strftime('%d.%m.%Y %H:%M') if event.last_updated else '-' }} |
+            UID: <code>{{ event.uid }}</code>
+        </small>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header">
+        <a class="text-decoration-none" data-bs-toggle="collapse" href="#rawJson">
+            Raw JSON &#9660;
+        </a>
+    </div>
+    <div id="rawJson" class="collapse">
+        <div class="card-body">
+            <pre class="json-pre">{{ event.raw_json | tojson(indent=2) }}</pre>
+        </div>
+    </div>
+</div>
+{% endblock %}
