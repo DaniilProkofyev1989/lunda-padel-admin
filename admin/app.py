@@ -217,6 +217,7 @@ async def analytics(
     values = [float(row["value"]) if row["value"] is not None else 0 for row in daily]
 
     ratings = db.get_analytics_ratings(d_from, d_to)
+    heatmap = db.get_heatmap_data(d_from, d_to)
 
     dow_names = {0: "Вс", 1: "Пн", 2: "Вт", 3: "Ср", 4: "Чт", 5: "Пт", 6: "Сб"}
     for row in ratings["by_dow"]:
@@ -243,6 +244,7 @@ async def analytics(
         "metric": metric,
         "metric_labels": metric_labels,
         "ratings": ratings,
+        "heatmap": heatmap,
         "dow_names": dow_names,
     }
 

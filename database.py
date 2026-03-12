@@ -844,5 +844,53 @@ class Database:
             "by_price": by_price,
         }
 
+    def get_heatmap_data(self, date_from: str, date_to: str) -> dict:
+        """Return club × hour heatmap: percentage of each club's tournaments per hour slot."""
+        self._ensure_connected()
+        with self.conn.cursor() as cur:
+            cur.execute(
+                """SELECT club_name,
+                          EXTRACT(HOUR FROM planned_date)::int as hour,
+                          COUNT(*) as cnt
+                   FROM events
+                   WHERE type = 'TOURNAMENT'
+                     AND planned_date::date BETWEEN %s AND %s
+                     AND club_name IS NOT NULL
+                     AND planned_date IS NOT NULL
+                   GROUP BY club_name, hour
+                   ORDER BY club_name, hour""",
+                (date_from, date_to),
+            )
+            rows = cur.fetchall()
+
+        # Build {club: {hour: count}}
+        clubs_data: dict[str, dict[int, int]] = {}
+        club_totals: dict[str, int] = {}
+        hours_set: set[int] = set()
+        for r in rows:
+            club = r["club_name"]
+            hour = r["hour"]
+            cnt = r["cnt"]
+            clubs_data.setdefault(club, {})[hour] = cnt
+            club_totals[club] = club_totals.get(club, 0) + cnt
+            hours_set.add(hour)
+
+        hours = sorted(hours_set)
+        # Sort clubs by total tournaments desc
+        sorted_clubs = sorted(club_totals.keys(), key=lambda c: club_totals[c], reverse=True)
+
+        # Build heatmap: list of {club, total, cells: [{hour, count, pct}]}
+        heatmap = []
+        for club in sorted_clubs:
+            total = club_totals[club]
+            cells = []
+            for h in hours:
+                cnt = clubs_data[club].get(h, 0)
+                pct = round(cnt / total * 100, 1) if total > 0 else 0
+                cells.append({"hour": h, "count": cnt, "pct": pct})
+            heatmap.append({"club": club, "total": total, "cells": cells})
+
+        return {"hours": hours, "clubs": heatmap}
+
     def close(self):
         self.conn.close()
