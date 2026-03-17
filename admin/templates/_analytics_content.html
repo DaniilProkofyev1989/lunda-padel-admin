@@ -13,24 +13,28 @@
     if (existing) existing.destroy();
 
     const metricColors = {
-        count:         { bg: 'rgba(13,110,253,0.6)', border: '#0d6efd' },
-
-        avg_price:     { bg: 'rgba(255,193,7,0.6)',  border: '#ffc107' },
-        total_players: { bg: 'rgba(111,66,193,0.6)', border: '#6f42c1' },
-        avg_players:   { bg: 'rgba(13,202,240,0.6)', border: '#0dcaf0' },
+        count:         { past: 'rgba(13,110,253,0.6)', today: 'rgba(25,135,84,0.8)', future: 'rgba(255,152,0,0.6)', borderPast: '#0d6efd', borderToday: '#198754', borderFuture: '#ff9800' },
+        avg_price:     { past: 'rgba(255,193,7,0.6)',  today: 'rgba(25,135,84,0.8)', future: 'rgba(255,152,0,0.6)', borderPast: '#ffc107', borderToday: '#198754', borderFuture: '#ff9800' },
+        total_players: { past: 'rgba(111,66,193,0.6)', today: 'rgba(25,135,84,0.8)', future: 'rgba(255,152,0,0.6)', borderPast: '#6f42c1', borderToday: '#198754', borderFuture: '#ff9800' },
+        avg_players:   { past: 'rgba(13,202,240,0.6)', today: 'rgba(25,135,84,0.8)', future: 'rgba(255,152,0,0.6)', borderPast: '#0dcaf0', borderToday: '#198754', borderFuture: '#ff9800' },
     };
     const metric = '{{ metric }}';
+    const today = '{{ today }}';
     const colors = metricColors[metric] || metricColors.count;
+    const chartLabels = {{ labels | tojson }};
+
+    const bgColors = chartLabels.map(d => d === today ? colors.today : d < today ? colors.past : colors.future);
+    const borderColors = chartLabels.map(d => d === today ? colors.borderToday : d < today ? colors.borderPast : colors.borderFuture);
 
     new Chart(document.getElementById('dailyChart').getContext('2d'), {
         type: metric === 'count' || metric === 'total_players' ? 'bar' : 'line',
         data: {
-            labels: {{ labels | tojson }},
+            labels: chartLabels,
             datasets: [{
                 label: '{{ metric_labels[metric] }}',
                 data: {{ values | tojson }},
-                backgroundColor: colors.bg,
-                borderColor: colors.border,
+                backgroundColor: bgColors,
+                borderColor: borderColors,
                 borderWidth: 2,
                 fill: metric !== 'count' && metric !== 'total_players',
                 tension: 0.3,

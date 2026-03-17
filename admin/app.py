@@ -209,8 +209,9 @@ async def analytics(
     metric: str = "count",
 ):
     db = get_db()
-    d_to = date_to or date.today().isoformat()
-    d_from = date_from or (date.today() - timedelta(days=30)).isoformat()
+    today = date.today()
+    d_to = date_to or (today + timedelta(days=14)).isoformat()
+    d_from = date_from or (today - timedelta(days=30)).isoformat()
 
     daily = db.get_analytics_chart_data(d_from, d_to, metric)
     labels = [row["date"].isoformat() for row in daily]
@@ -245,6 +246,7 @@ async def analytics(
         "metric_labels": metric_labels,
         "ratings": ratings,
         "heatmap": heatmap,
+        "today": today.isoformat(),
         "dow_names": dow_names,
     }
 
