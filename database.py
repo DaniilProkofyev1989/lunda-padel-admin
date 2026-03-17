@@ -185,33 +185,17 @@ class Database:
     def upsert_event(self, event_id: str, raw_json: dict):
         """Insert new event or update existing one with parsed fields.
 
-        Saves a snapshot to event_snapshots when count_players or game_status changes.
+        Saves a snapshot to event_snapshots on every scrape to track dynamics.
         """
         now = datetime.now(timezone.utc)
         parsed = _parse_event(raw_json)
         with self.conn.cursor() as cur:
-            # Check current state for snapshot
+            # Always save snapshot to track player count dynamics over time
             cur.execute(
-                "SELECT count_players, game_status FROM events WHERE uid = %s",
-                (str(event_id),),
+                """INSERT INTO event_snapshots (event_uid, scraped_at, count_players, game_status)
+                   VALUES (%s, %s, %s, %s)""",
+                (str(event_id), now, parsed["count_players"], parsed["game_status"]),
             )
-            existing = cur.fetchone()
-            if existing and (
-                existing["count_players"] != parsed["count_players"]
-                or existing["game_status"] != parsed["game_status"]
-            ):
-                cur.execute(
-                    """INSERT INTO event_snapshots (event_uid, scraped_at, count_players, game_status)
-                       VALUES (%s, %s, %s, %s)""",
-                    (str(event_id), now, existing["count_players"], existing["game_status"]),
-                )
-            elif not existing:
-                # First time seeing this event — save initial snapshot
-                cur.execute(
-                    """INSERT INTO event_snapshots (event_uid, scraped_at, count_players, game_status)
-                       VALUES (%s, %s, %s, %s)""",
-                    (str(event_id), now, parsed["count_players"], parsed["game_status"]),
-                )
             cur.execute(
                 """
                 INSERT INTO events (
