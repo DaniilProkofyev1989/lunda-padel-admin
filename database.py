@@ -624,6 +624,24 @@ class Database:
             )
             return cur.fetchall()
 
+    def save_daily_snapshots(self) -> int:
+        """Snapshot current count_players for all active tournaments.
+
+        Returns the number of snapshots saved.
+        """
+        self._ensure_connected()
+        with self.conn.cursor() as cur:
+            cur.execute(
+                """INSERT INTO event_snapshots (event_uid, scraped_at, count_players, game_status)
+                   SELECT uid, NOW(), count_players, game_status
+                   FROM events
+                   WHERE type = 'TOURNAMENT'
+                     AND planned_date >= NOW() - INTERVAL '30 days'"""
+            )
+            count = cur.rowcount
+        self.conn.commit()
+        return count
+
     def get_tournaments_daily_stats(
         self, date_from: str, date_to: str,
     ) -> list[dict]:
