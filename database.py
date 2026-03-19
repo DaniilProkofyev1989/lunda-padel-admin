@@ -627,16 +627,22 @@ class Database:
     def save_daily_snapshots(self) -> int:
         """Snapshot current count_players for all active tournaments.
 
+        Skips events that already have a snapshot today.
         Returns the number of snapshots saved.
         """
         self._ensure_connected()
         with self.conn.cursor() as cur:
             cur.execute(
                 """INSERT INTO event_snapshots (event_uid, scraped_at, count_players, game_status)
-                   SELECT uid, NOW(), count_players, game_status
-                   FROM events
-                   WHERE type = 'TOURNAMENT'
-                     AND planned_date >= NOW() - INTERVAL '30 days'"""
+                   SELECT e.uid, NOW(), e.count_players, e.game_status
+                   FROM events e
+                   WHERE e.type = 'TOURNAMENT'
+                     AND e.planned_date >= NOW() - INTERVAL '30 days'
+                     AND NOT EXISTS (
+                         SELECT 1 FROM event_snapshots es
+                         WHERE es.event_uid = e.uid
+                           AND es.scraped_at::date = CURRENT_DATE
+                     )"""
             )
             count = cur.rowcount
         self.conn.commit()
