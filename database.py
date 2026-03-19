@@ -76,6 +76,32 @@ CREATE INDEX IF NOT EXISTS idx_snapshots_event_uid ON event_snapshots(event_uid)
 CREATE INDEX IF NOT EXISTS idx_snapshots_scraped_at ON event_snapshots(scraped_at);
 """
 
+_SCHEMA_SNAPSHOT_TRIGGER = """
+CREATE OR REPLACE FUNCTION save_snapshots_on_scrape() RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.status = 'success' THEN
+        INSERT INTO event_snapshots (event_uid, scraped_at, count_players, game_status)
+        SELECT e.uid, NOW(), e.count_players, e.game_status
+        FROM events e
+        WHERE e.type = 'TOURNAMENT'
+          AND e.planned_date >= NOW() - INTERVAL '30 days'
+          AND NOT EXISTS (
+              SELECT 1 FROM event_snapshots es
+              WHERE es.event_uid = e.uid AND es.scraped_at::date = CURRENT_DATE
+          );
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DO $$ BEGIN
+    CREATE TRIGGER trg_save_snapshots
+        AFTER INSERT ON scrape_log
+        FOR EACH ROW EXECUTE FUNCTION save_snapshots_on_scrape();
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
+"""
+
 _MIGRATION_BACKFILL = """
 UPDATE events SET
     type = raw_json->>'type',
@@ -178,6 +204,8 @@ class Database:
             cur.execute(_SCHEMA_INDEXES)
             # 4. Create snapshots table
             cur.execute(_SCHEMA_SNAPSHOTS)
+            # 4b. Create trigger: auto-save snapshots on successful scrape
+            cur.execute(_SCHEMA_SNAPSHOT_TRIGGER)
             # 5. Backfill parsed fields for rows that don't have them yet
             cur.execute(_MIGRATION_BACKFILL)
         self.conn.commit()

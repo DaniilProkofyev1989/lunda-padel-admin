@@ -1,7 +1,6 @@
 import math
 import os
 import sys
-import threading
 from datetime import date, timedelta
 
 
@@ -31,29 +30,6 @@ def get_db() -> Database:
     if _db is None:
         _db = Database()
     return _db
-
-
-# --- Daily snapshots (auto, no cron needed) ---
-_snapshot_date: date | None = None
-_snapshot_lock = threading.Lock()
-
-
-def _maybe_save_snapshots():
-    """Save daily snapshots once per day, on first request."""
-    global _snapshot_date
-    today = date.today()
-    if _snapshot_date == today:
-        return
-    with _snapshot_lock:
-        if _snapshot_date == today:
-            return
-        try:
-            db = get_db()
-            count = db.save_daily_snapshots()
-            _snapshot_date = today
-            print(f"[snapshots] Saved {count} snapshots for {today}")
-        except Exception as e:
-            print(f"[snapshots] Error: {e}")
 
 
 # --- Auth middleware ---
@@ -103,7 +79,6 @@ async def logout():
 
 @app.get("/", response_class=HTMLResponse)
 async def dashboard(request: Request):
-    _maybe_save_snapshots()
     db = get_db()
     stats = db.get_scrape_stats()
     return templates.TemplateResponse("dashboard.html", {"request": request, "stats": stats})
