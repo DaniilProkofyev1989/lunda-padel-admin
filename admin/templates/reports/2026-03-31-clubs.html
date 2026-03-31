@@ -1,0 +1,931 @@
+{% extends "base.html" %}
+{% block title %}Состояние рынка по клубам — март 2026 — Lunda Admin{% endblock %}
+{% block content %}
+<div class="mb-3">
+    <a href="/reports" class="text-muted">&larr; Все отчёты</a>
+</div>
+
+<h3 class="mb-1">Состояние рынка по клубам — март 2026</h3>
+<p class="text-muted">31 марта 2026 &middot; Данные за 1–31 марта 2026</p>
+
+<div class="alert alert-info">
+    <strong>Что в отчёте:</strong> Полный анализ 2 497 турниров в 42 клубах за март. Сводная таблица с ключевыми метриками, динамика по неделям, срезы по грейдам / ценам / дням / времени, детальные слоты по каждому из топ-20 клубов. Цель — понять, где спрос, где провалы, и какие ниши свободны.
+</div>
+
+<!-- ==================== КЛЮЧЕВЫЕ ЦИФРЫ ==================== -->
+<h4 class="mt-4 mb-3">Ключевые цифры марта</h4>
+<div class="row g-3 mb-4">
+    <div class="col-md-2">
+        <div class="card text-center border-primary">
+            <div class="card-body py-2">
+                <div class="fs-3 fw-bold text-primary">2 497</div>
+                <small class="text-muted">Турниров</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="card text-center border-success">
+            <div class="card-body py-2">
+                <div class="fs-3 fw-bold text-success">18 672</div>
+                <small class="text-muted">Игроков</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="card text-center">
+            <div class="card-body py-2">
+                <div class="fs-3 fw-bold">42</div>
+                <small class="text-muted">Клуба</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="card text-center">
+            <div class="card-body py-2">
+                <div class="fs-3 fw-bold">172</div>
+                <small class="text-muted">Организатора</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="card text-center border-warning">
+            <div class="card-body py-2">
+                <div class="fs-3 fw-bold text-warning">65.8%</div>
+                <small class="text-muted">Ср. заполняемость</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="card text-center">
+            <div class="card-body py-2">
+                <div class="fs-3 fw-bold">5 987 ₽</div>
+                <small class="text-muted">Ср. цена</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== ДИНАМИКА ПО НЕДЕЛЯМ ==================== -->
+<h4 class="mt-4 mb-3">Динамика по неделям</h4>
+<div class="table-responsive">
+    <table class="table table-bordered table-sm">
+        <thead class="table-light">
+            <tr>
+                <th>Неделя</th>
+                <th>Турниров</th>
+                <th>Игроков</th>
+                <th>Заполн.</th>
+                <th>Клубов</th>
+                <th>Организаторов</th>
+                <th>Тренд</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>24 фев – 1 мар</td><td>98</td><td>797</td><td>68.5%</td><td>25</td><td>47</td><td></td></tr>
+            <tr><td>2–8 мар</td><td>499</td><td>3 554</td><td>62.8%</td><td>33</td><td>105</td><td class="text-success">+409%</td></tr>
+            <tr><td>9–15 мар</td><td>567</td><td>4 405</td><td>68.3%</td><td>36</td><td>111</td><td class="text-success">+14%</td></tr>
+            <tr><td>16–22 мар</td><td>566</td><td>4 289</td><td>66.3%</td><td>32</td><td>123</td><td class="text-muted">0%</td></tr>
+            <tr><td>23–29 мар</td><td>655</td><td>4 756</td><td>64.6%</td><td>37</td><td>133</td><td class="text-success">+16%</td></tr>
+            <tr class="table-warning"><td>30–31 мар <small>(не полная)</small></td><td>112</td><td>871</td><td>68.6%</td><td>30</td><td>58</td><td class="text-muted">—</td></tr>
+        </tbody>
+    </table>
+</div>
+<p class="text-muted small">Рынок стабильно растёт: от ~500 до ~655 турниров в неделю (+30% за месяц). Количество организаторов выросло с 105 до 133.</p>
+
+<!-- ==================== СВОДНАЯ ТАБЛИЦА КЛУБОВ ==================== -->
+<h4 class="mt-5 mb-3">Сводная таблица клубов</h4>
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-sm sortable-table">
+        <thead class="table-light">
+            <tr>
+                <th class="sortable" data-col="0" style="cursor:pointer;user-select:none;"># <span class="sort-arrow text-muted">&#8597;</span></th>
+                <th class="sortable" data-col="1" style="cursor:pointer;user-select:none;">Клуб <span class="sort-arrow text-muted">&#8597;</span></th>
+                <th class="sortable" data-col="2" style="cursor:pointer;user-select:none;">Турниров <span class="sort-arrow text-muted">&#8597;</span></th>
+                <th class="sortable" data-col="3" style="cursor:pointer;user-select:none;">Доля <span class="sort-arrow text-muted">&#8597;</span></th>
+                <th class="sortable" data-col="4" style="cursor:pointer;user-select:none;">Игроков <span class="sort-arrow text-muted">&#8597;</span></th>
+                <th class="sortable" data-col="5" style="cursor:pointer;user-select:none;">Заполн. <span class="sort-arrow text-muted">&#8597;</span></th>
+                <th class="sortable" data-col="6" style="cursor:pointer;user-select:none;">Ср. цена <span class="sort-arrow text-muted">&#8597;</span></th>
+                <th class="sortable" data-col="7" style="cursor:pointer;user-select:none;">Орг-ров <span class="sort-arrow text-muted">&#8597;</span></th>
+                <th class="sortable" data-col="8" style="cursor:pointer;user-select:none;">100% <span class="sort-arrow text-muted">&#8597;</span></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>1</td><td>First Padel Club</td><td data-sort="358">358</td><td data-sort="14.3">14.3%</td><td data-sort="2891">2 891</td><td data-sort="71.0">71.0%</td><td data-sort="5548">5 548 ₽</td><td data-sort="29">29</td><td data-sort="126">126</td></tr>
+            <tr><td>2</td><td>Buenos Padel Moscow Savelovskaya</td><td data-sort="263">263</td><td data-sort="10.5">10.5%</td><td data-sort="1600">1 600</td><td data-sort="60.7">60.7%</td><td data-sort="6948">6 948 ₽</td><td data-sort="28">28</td><td data-sort="62">62</td></tr>
+            <tr><td>3</td><td>Padlhub Skolkovo</td><td data-sort="193">193</td><td data-sort="7.7">7.7%</td><td data-sort="1501">1 501</td><td data-sort="55.9">55.9%</td><td data-sort="7052">7 052 ₽</td><td data-sort="9">9</td><td data-sort="65">65</td></tr>
+            <tr><td>4</td><td>Padlhub Terekhovo</td><td data-sort="175">175</td><td data-sort="7.0">7.0%</td><td data-sort="1367">1 367</td><td data-sort="67.1">67.1%</td><td data-sort="6745">6 745 ₽</td><td data-sort="19">19</td><td data-sort="79">79</td></tr>
+            <tr><td>5</td><td>Lunda Padel DeloSport Fili</td><td data-sort="139">139</td><td data-sort="5.6">5.6%</td><td data-sort="1056">1 056</td><td data-sort="70.3">70.3%</td><td data-sort="6786">6 786 ₽</td><td data-sort="12">12</td><td data-sort="53">53</td></tr>
+            <tr class="table-success"><td>6</td><td>PARI Padel 8 Marta</td><td data-sort="124">124</td><td data-sort="5.0">5.0%</td><td data-sort="1127">1 127</td><td data-sort="82.8"><strong>82.8%</strong></td><td data-sort="7228">7 228 ₽</td><td data-sort="23">23</td><td data-sort="55">55</td></tr>
+            <tr><td>7</td><td>Sky Padel</td><td data-sort="111">111</td><td data-sort="4.4">4.4%</td><td data-sort="729">729</td><td data-sort="66.3">66.3%</td><td data-sort="8682">8 682 ₽</td><td data-sort="6">6</td><td data-sort="45">45</td></tr>
+            <tr class="table-success"><td>8</td><td>Padlhub Yasenevo</td><td data-sort="108">108</td><td data-sort="4.3">4.3%</td><td data-sort="962">962</td><td data-sort="74.6">74.6%</td><td data-sort="4407">4 407 ₽</td><td data-sort="6">6</td><td data-sort="53">53</td></tr>
+            <tr class="table-success"><td>9</td><td>Lunda Padel Rechnoy</td><td data-sort="99">99</td><td data-sort="4.0">4.0%</td><td data-sort="896">896</td><td data-sort="79.0"><strong>79.0%</strong></td><td data-sort="5116">5 116 ₽</td><td data-sort="9">9</td><td data-sort="59">59</td></tr>
+            <tr class="table-danger"><td>10</td><td>Padlhub Nagatinskaya</td><td data-sort="95">95</td><td data-sort="3.8">3.8%</td><td data-sort="397">397</td><td data-sort="34.3"><strong>34.3%</strong></td><td data-sort="6999">6 999 ₽</td><td data-sort="13">13</td><td data-sort="11">11</td></tr>
+            <tr class="table-success"><td>11</td><td>Padel Land</td><td data-sort="90">90</td><td data-sort="3.6">3.6%</td><td data-sort="1122">1 122</td><td data-sort="86.4"><strong>86.4%</strong></td><td data-sort="4676">4 676 ₽</td><td data-sort="18">18</td><td data-sort="59">59</td></tr>
+            <tr><td>12</td><td>Padel NOK</td><td data-sort="78">78</td><td data-sort="3.1">3.1%</td><td data-sort="578">578</td><td data-sort="67.4">67.4%</td><td data-sort="6626">6 626 ₽</td><td data-sort="6">6</td><td data-sort="26">26</td></tr>
+            <tr class="table-danger"><td>13</td><td>Nevel Padel Club</td><td data-sort="73">73</td><td data-sort="2.9">2.9%</td><td data-sort="314">314</td><td data-sort="40.6"><strong>40.6%</strong></td><td data-sort="6301">6 301 ₽</td><td data-sort="11">11</td><td data-sort="21">21</td></tr>
+            <tr><td>14</td><td>Padlhub Nagatinskaya Premium</td><td data-sort="60">60</td><td data-sort="2.4">2.4%</td><td data-sort="320">320</td><td data-sort="55.3">55.3%</td><td data-sort="5660">5 660 ₽</td><td data-sort="7">7</td><td data-sort="16">16</td></tr>
+            <tr class="table-success"><td>15</td><td>PADEL TIME SLAVA</td><td data-sort="51">51</td><td data-sort="2.0">2.0%</td><td data-sort="463">463</td><td data-sort="81.9"><strong>81.9%</strong></td><td data-sort="4543">4 543 ₽</td><td data-sort="8">8</td><td data-sort="31">31</td></tr>
+            <tr><td>16</td><td>Padel Park</td><td data-sort="48">48</td><td data-sort="1.9">1.9%</td><td data-sort="386">386</td><td data-sort="69.2">69.2%</td><td data-sort="3558">3 558 ₽</td><td data-sort="5">5</td><td data-sort="23">23</td></tr>
+            <tr class="table-danger"><td>17</td><td>ZVI padel club</td><td data-sort="46">46</td><td data-sort="1.8">1.8%</td><td data-sort="246">246</td><td data-sort="51.6">51.6%</td><td data-sort="6912">6 912 ₽</td><td data-sort="9">9</td><td data-sort="9">9</td></tr>
+            <tr class="table-danger"><td>18</td><td>UP2 PADEL</td><td data-sort="39">39</td><td data-sort="1.6">1.6%</td><td data-sort="144">144</td><td data-sort="37.3"><strong>37.3%</strong></td><td data-sort="4418">4 418 ₽</td><td data-sort="5">5</td><td data-sort="4">4</td></tr>
+            <tr><td>19</td><td>Padel Battle | Zelenograd</td><td data-sort="39">39</td><td data-sort="1.6">1.6%</td><td data-sort="337">337</td><td data-sort="64.5">64.5%</td><td data-sort="4218">4 218 ₽</td><td data-sort="4">4</td><td data-sort="20">20</td></tr>
+            <tr><td>20</td><td>Padel Club Zhukovka</td><td data-sort="38">38</td><td data-sort="1.5">1.5%</td><td data-sort="191">191</td><td data-sort="55.5">55.5%</td><td data-sort="5105">5 105 ₽</td><td data-sort="1">1</td><td data-sort="11">11</td></tr>
+        </tbody>
+    </table>
+</div>
+<p class="text-muted small">
+    <span class="badge bg-success">Зелёные</span> — заполняемость &ge; 75% (спрос превышает предложение).
+    <span class="badge bg-danger">Красные</span> — заполняемость &lt; 50% (проблемы с привлечением).
+    <strong>100%</strong> — количество турниров, заполненных полностью.
+</p>
+
+<!-- ==================== ЛИДЕРЫ И АУТСАЙДЕРЫ ==================== -->
+<h4 class="mt-5 mb-3">Лидеры и аутсайдеры по заполняемости</h4>
+<div class="row g-3">
+    <div class="col-md-6">
+        <div class="card border-success">
+            <div class="card-header bg-success text-white">Топ-5 по заполняемости</div>
+            <div class="card-body p-0">
+                <table class="table table-sm mb-0">
+                    <thead class="table-light"><tr><th>Клуб</th><th>Заполн.</th><th>Ср. цена</th><th>Турниров</th></tr></thead>
+                    <tbody>
+                        <tr><td>Padel A33</td><td><strong>95.3%</strong></td><td>3 500 ₽</td><td>23</td></tr>
+                        <tr><td>Padel Land</td><td><strong>86.4%</strong></td><td>4 676 ₽</td><td>90</td></tr>
+                        <tr><td>V-PADEL</td><td><strong>83.1%</strong></td><td>4 471 ₽</td><td>31</td></tr>
+                        <tr><td>PARI Padel 8 Marta</td><td><strong>82.8%</strong></td><td>7 228 ₽</td><td>124</td></tr>
+                        <tr><td>PADEL TIME SLAVA</td><td><strong>81.9%</strong></td><td>4 543 ₽</td><td>51</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white">Антирейтинг по заполняемости</div>
+            <div class="card-body p-0">
+                <table class="table table-sm mb-0">
+                    <thead class="table-light"><tr><th>Клуб</th><th>Заполн.</th><th>Ср. цена</th><th>Турниров</th></tr></thead>
+                    <tbody>
+                        <tr><td>Padlhub Nagatinskaya</td><td><strong>34.3%</strong></td><td>6 999 ₽</td><td>95</td></tr>
+                        <tr><td>UP2 PADEL</td><td><strong>37.3%</strong></td><td>4 418 ₽</td><td>39</td></tr>
+                        <tr><td>R Padel Club</td><td><strong>37.9%</strong></td><td>4 624 ₽</td><td>17</td></tr>
+                        <tr><td>Nevel Padel Club</td><td><strong>40.6%</strong></td><td>6 301 ₽</td><td>73</td></tr>
+                        <tr><td>ZVI padel club</td><td><strong>51.6%</strong></td><td>6 912 ₽</td><td>46</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<p class="text-muted small mt-2">Заметный паттерн: лидеры по заполняемости держат цены 3 500–5 000 ₽. Аутсайдеры — в среднем 5 000–7 000 ₽. Исключение — PARI Padel: высокая заполняемость при высокой цене (бренд, локация).</p>
+
+<!-- ==================== ПО ГРЕЙДАМ ==================== -->
+<h4 class="mt-5 mb-3">Распределение по грейдам</h4>
+<div class="table-responsive">
+    <table class="table table-bordered table-sm sortable-table">
+        <thead class="table-light">
+            <tr>
+                <th class="sortable" data-col="0" style="cursor:pointer;user-select:none;">Грейд <span class="sort-arrow text-muted">&#8597;</span></th>
+                <th class="sortable" data-col="1" style="cursor:pointer;user-select:none;">Турниров <span class="sort-arrow text-muted">&#8597;</span></th>
+                <th class="sortable" data-col="2" style="cursor:pointer;user-select:none;">Доля <span class="sort-arrow text-muted">&#8597;</span></th>
+                <th class="sortable" data-col="3" style="cursor:pointer;user-select:none;">Заполн. <span class="sort-arrow text-muted">&#8597;</span></th>
+                <th class="sortable" data-col="4" style="cursor:pointer;user-select:none;">Ср. цена <span class="sort-arrow text-muted">&#8597;</span></th>
+                <th class="sortable" data-col="5" style="cursor:pointer;user-select:none;">Игроков <span class="sort-arrow text-muted">&#8597;</span></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>D</td><td data-sort="1185">1 185</td><td data-sort="47.5">47.5%</td><td data-sort="68.9">68.9%</td><td data-sort="5219">5 219 ₽</td><td data-sort="9022">9 022</td></tr>
+            <tr><td>D+</td><td data-sort="824">824</td><td data-sort="33.0">33.0%</td><td data-sort="63.6">63.6%</td><td data-sort="6404">6 404 ₽</td><td data-sort="6124">6 124</td></tr>
+            <tr><td>C</td><td data-sort="374">374</td><td data-sort="15.0">15.0%</td><td data-sort="60.5">60.5%</td><td data-sort="6910">6 910 ₽</td><td data-sort="2578">2 578</td></tr>
+            <tr><td>C+</td><td data-sort="87">87</td><td data-sort="3.5">3.5%</td><td data-sort="61.4">61.4%</td><td data-sort="8382">8 382 ₽</td><td data-sort="652">652</td></tr>
+            <tr class="table-info"><td>B</td><td data-sort="27">27</td><td data-sort="1.1">1.1%</td><td data-sort="84.9"><strong>84.9%</strong></td><td data-sort="6470">6 470 ₽</td><td data-sort="296">296</td></tr>
+        </tbody>
+    </table>
+</div>
+<p class="text-muted small">D-грейд доминирует (47.5%), но грейд B показывает рекордную заполняемость 84.9% при малом количестве турниров — потенциально недообслуженная ниша. Чем выше грейд, тем выше цена.</p>
+
+<!-- ==================== ПО ДНЯМ НЕДЕЛИ ==================== -->
+<h4 class="mt-5 mb-3">По дням недели</h4>
+<div class="table-responsive">
+    <table class="table table-bordered table-sm">
+        <thead class="table-light"><tr><th>День</th><th>Турниров</th><th>Заполн.</th><th>Ср. цена</th></tr></thead>
+        <tbody>
+            <tr><td>Пн</td><td>257</td><td>62.7%</td><td>5 761 ₽</td></tr>
+            <tr><td>Вт</td><td>308</td><td>65.4%</td><td>5 262 ₽</td></tr>
+            <tr><td>Ср</td><td>298</td><td>62.9%</td><td>5 818 ₽</td></tr>
+            <tr class="table-info"><td>Чт</td><td>278</td><td><strong>68.1%</strong></td><td>5 292 ₽</td></tr>
+            <tr><td>Пт</td><td>326</td><td>65.8%</td><td>5 778 ₽</td></tr>
+            <tr class="table-info"><td>Сб</td><td>478</td><td><strong>67.5%</strong></td><td>6 613 ₽</td></tr>
+            <tr class="table-info"><td>Вс</td><td>552</td><td><strong>66.4%</strong></td><td>6 520 ₽</td></tr>
+        </tbody>
+    </table>
+</div>
+<p class="text-muted small">Воскресенье — самый загруженный день (552 турнира). Четверг — лучшая заполняемость среди будней (68.1%). Понедельник/среда — самые «слабые» дни.</p>
+
+<!-- ==================== ПО ЧАСАМ ==================== -->
+<h4 class="mt-5 mb-3">По времени дня</h4>
+<div class="table-responsive">
+    <table class="table table-bordered table-sm">
+        <thead class="table-light"><tr><th>Время</th><th>Турниров</th><th>Заполн.</th><th>Визуально</th></tr></thead>
+        <tbody>
+            <tr><td>07:00</td><td>50</td><td>68.4%</td><td><div class="bg-success" style="height:16px;width:68%"></div></td></tr>
+            <tr><td>08:00</td><td>37</td><td>46.3%</td><td><div class="bg-warning" style="height:16px;width:46%"></div></td></tr>
+            <tr><td>09:00</td><td>9</td><td>38.9%</td><td><div class="bg-danger" style="height:16px;width:39%"></div></td></tr>
+            <tr><td>10:00</td><td>119</td><td>69.7%</td><td><div class="bg-success" style="height:16px;width:70%"></div></td></tr>
+            <tr class="table-success"><td>11:00</td><td>98</td><td><strong>80.7%</strong></td><td><div class="bg-success" style="height:16px;width:81%"></div></td></tr>
+            <tr><td>12:00</td><td>369</td><td>67.3%</td><td><div class="bg-success" style="height:16px;width:67%"></div></td></tr>
+            <tr><td>13:00</td><td>135</td><td>68.7%</td><td><div class="bg-success" style="height:16px;width:69%"></div></td></tr>
+            <tr><td>14:00</td><td>171</td><td>70.3%</td><td><div class="bg-success" style="height:16px;width:70%"></div></td></tr>
+            <tr class="table-success"><td>15:00</td><td>109</td><td><strong>74.7%</strong></td><td><div class="bg-success" style="height:16px;width:75%"></div></td></tr>
+            <tr><td>16:00</td><td>150</td><td>64.3%</td><td><div class="bg-success" style="height:16px;width:64%"></div></td></tr>
+            <tr><td>17:00</td><td>83</td><td>55.6%</td><td><div class="bg-warning" style="height:16px;width:56%"></div></td></tr>
+            <tr><td>18:00</td><td>225</td><td>62.1%</td><td><div class="bg-success" style="height:16px;width:62%"></div></td></tr>
+            <tr><td>19:00</td><td>344</td><td>63.6%</td><td><div class="bg-success" style="height:16px;width:64%"></div></td></tr>
+            <tr><td>20:00</td><td>288</td><td>68.6%</td><td><div class="bg-success" style="height:16px;width:69%"></div></td></tr>
+            <tr><td>21:00</td><td>288</td><td>61.1%</td><td><div class="bg-success" style="height:16px;width:61%"></div></td></tr>
+            <tr><td>22:00</td><td>21</td><td>38.9%</td><td><div class="bg-danger" style="height:16px;width:39%"></div></td></tr>
+        </tbody>
+    </table>
+</div>
+<p class="text-muted small">Лучшая заполняемость в 11:00 (80.7%) и 15:00 (74.7%). Самые загруженные слоты: 12:00 (369 турн.) и 19:00 (344). Утро 8-9 и поздний вечер 22+ — провал.</p>
+
+<!-- ==================== ПО ЦЕНОВЫМ СЕГМЕНТАМ ==================== -->
+<h4 class="mt-5 mb-3">По ценовым сегментам</h4>
+<div class="table-responsive">
+    <table class="table table-bordered table-sm sortable-table">
+        <thead class="table-light">
+            <tr>
+                <th class="sortable" data-col="0" style="cursor:pointer;user-select:none;">Диапазон <span class="sort-arrow text-muted">&#8597;</span></th>
+                <th class="sortable" data-col="1" style="cursor:pointer;user-select:none;">Турниров <span class="sort-arrow text-muted">&#8597;</span></th>
+                <th class="sortable" data-col="2" style="cursor:pointer;user-select:none;">Заполн. <span class="sort-arrow text-muted">&#8597;</span></th>
+                <th class="sortable" data-col="3" style="cursor:pointer;user-select:none;">Игроков <span class="sort-arrow text-muted">&#8597;</span></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Бесплатно</td><td data-sort="1">1</td><td data-sort="100.0">100.0%</td><td data-sort="12">12</td></tr>
+            <tr class="table-success"><td>до 3 000 ₽</td><td data-sort="94">94</td><td data-sort="81.4"><strong>81.4%</strong></td><td data-sort="875">875</td></tr>
+            <tr class="table-success"><td>3 000–4 999 ₽</td><td data-sort="865">865</td><td data-sort="71.9"><strong>71.9%</strong></td><td data-sort="6882">6 882</td></tr>
+            <tr><td>5 000–6 999 ₽</td><td data-sort="989">989</td><td data-sort="60.9">60.9%</td><td data-sort="6680">6 680</td></tr>
+            <tr><td>7 000–8 999 ₽</td><td data-sort="177">177</td><td data-sort="68.1">68.1%</td><td data-sort="1430">1 430</td></tr>
+            <tr><td>9 000–10 999 ₽</td><td data-sort="82">82</td><td data-sort="60.5">60.5%</td><td data-sort="639">639</td></tr>
+            <tr><td>11 000+ ₽</td><td data-sort="289">289</td><td data-sort="59.4">59.4%</td><td data-sort="2154">2 154</td></tr>
+        </tbody>
+    </table>
+</div>
+<p class="text-muted small">Sweet spot по цене: 3 000–4 999 ₽ — максимум турниров при высокой заполняемости (71.9%). Сегмент 5 000–6 999 ₽ — самый массовый (989 турн.), но заполняемость падает до 60.9%.</p>
+
+<!-- ==================== ТОП ОРГАНИЗАТОРОВ ==================== -->
+<h4 class="mt-5 mb-3">Топ-15 организаторов</h4>
+<div class="table-responsive">
+    <table class="table table-bordered table-sm sortable-table">
+        <thead class="table-light">
+            <tr>
+                <th class="sortable" data-col="0" style="cursor:pointer;user-select:none;"># <span class="sort-arrow text-muted">&#8597;</span></th>
+                <th class="sortable" data-col="1" style="cursor:pointer;user-select:none;">Организатор <span class="sort-arrow text-muted">&#8597;</span></th>
+                <th class="sortable" data-col="2" style="cursor:pointer;user-select:none;">Турниров <span class="sort-arrow text-muted">&#8597;</span></th>
+                <th class="sortable" data-col="3" style="cursor:pointer;user-select:none;">Игроков <span class="sort-arrow text-muted">&#8597;</span></th>
+                <th class="sortable" data-col="4" style="cursor:pointer;user-select:none;">Заполн. <span class="sort-arrow text-muted">&#8597;</span></th>
+                <th class="sortable" data-col="5" style="cursor:pointer;user-select:none;">Ср. цена <span class="sort-arrow text-muted">&#8597;</span></th>
+                <th class="sortable" data-col="6" style="cursor:pointer;user-select:none;">Клубов <span class="sort-arrow text-muted">&#8597;</span></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>1</td><td>Admin GLOBAL PADEL</td><td data-sort="236">236</td><td data-sort="1761">1 761</td><td data-sort="68.6">68.6%</td><td data-sort="8210">8 210 ₽</td><td data-sort="9">9</td></tr>
+            <tr><td>2</td><td>Mokrousova Greta</td><td data-sort="186">186</td><td data-sort="1332">1 332</td><td data-sort="48.5">48.5%</td><td data-sort="6505">6 505 ₽</td><td data-sort="3">3</td></tr>
+            <tr><td>3</td><td>Sufiyarova Evelina</td><td data-sort="152">152</td><td data-sort="1099">1 099</td><td data-sort="62.6">62.6%</td><td data-sort="5724">5 724 ₽</td><td data-sort="5">5</td></tr>
+            <tr><td>4</td><td>Ikonnikov Timofey</td><td data-sort="130">130</td><td data-sort="927">927</td><td data-sort="76.1">76.1%</td><td data-sort="5469">5 469 ₽</td><td data-sort="8">8</td></tr>
+            <tr><td>5</td><td>Pomerko Aleksey</td><td data-sort="121">121</td><td data-sort="647">647</td><td data-sort="57.0">57.0%</td><td data-sort="6953">6 953 ₽</td><td data-sort="6">6</td></tr>
+            <tr><td>6</td><td>Puchkova Viktoriya</td><td data-sort="67">67</td><td data-sort="476">476</td><td data-sort="74.2">74.2%</td><td data-sort="4969">4 969 ₽</td><td data-sort="2">2</td></tr>
+            <tr class="table-success"><td>7</td><td>Krasyukov Artyom</td><td data-sort="56">56</td><td data-sort="555">555</td><td data-sort="88.8"><strong>88.8%</strong></td><td data-sort="4652">4 652 ₽</td><td data-sort="1">1</td></tr>
+            <tr><td>8</td><td>Mylnikov Denis</td><td data-sort="52">52</td><td data-sort="329">329</td><td data-sort="60.5">60.5%</td><td data-sort="6987">6 987 ₽</td><td data-sort="4">4</td></tr>
+            <tr><td>9</td><td>Tsurkan Ameliya</td><td data-sort="48">48</td><td data-sort="367">367</td><td data-sort="82.5">82.5%</td><td data-sort="5670">5 670 ₽</td><td data-sort="4">4</td></tr>
+            <tr><td>10</td><td>Chemodanova Muza</td><td data-sort="43">43</td><td data-sort="320">320</td><td data-sort="68.1">68.1%</td><td data-sort="7314">7 314 ₽</td><td data-sort="5">5</td></tr>
+            <tr><td>11</td><td>Prokofev Daniil</td><td data-sort="39">39</td><td data-sort="192">192</td><td data-sort="55.2">55.2%</td><td data-sort="5648">5 648 ₽</td><td data-sort="4">4</td></tr>
+            <tr><td>12</td><td>ZHUKOVKA PADEL CLUB</td><td data-sort="38">38</td><td data-sort="191">191</td><td data-sort="55.5">55.5%</td><td data-sort="5105">5 105 ₽</td><td data-sort="1">1</td></tr>
+            <tr><td>13</td><td>Osipova Natalya</td><td data-sort="37">37</td><td data-sort="311">311</td><td data-sort="72.3">72.3%</td><td data-sort="4243">4 243 ₽</td><td data-sort="1">1</td></tr>
+            <tr class="table-success"><td>14</td><td>Bikeshchenko Artem</td><td data-sort="35">35</td><td data-sort="450">450</td><td data-sort="96.5"><strong>96.5%</strong></td><td data-sort="3500">3 500 ₽</td><td data-sort="3">3</td></tr>
+            <tr><td>15</td><td>Cheldinova Olya</td><td data-sort="35">35</td><td data-sort="354">354</td><td data-sort="80.1">80.1%</td><td data-sort="4957">4 957 ₽</td><td data-sort="2">2</td></tr>
+        </tbody>
+    </table>
+</div>
+<p class="text-muted small">Admin GLOBAL PADEL — крупнейший игрок (236 турн., 9 клубов, ср. 8 210 ₽). Лучшая заполняемость у Bikeshchenko Artem (96.5% при цене 3 500 ₽) и Krasyukov Artyom (88.8%).</p>
+
+<!-- ==================== ЛУЧШИЕ СЛОТЫ ПО КЛУБАМ ==================== -->
+<h4 class="mt-5 mb-3">Лучшие слоты по клубам (топ-20)</h4>
+<p class="text-muted small mb-4">Топ-3 будни + топ-3 выходные для каждого клуба. Сортировка по количеству турниров в слоте, затем по игрокам.</p>
+
+<!-- #1 First Padel Club -->
+<div class="card mb-3">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <strong>#1 First Padel Club</strong>
+        <span class="badge bg-primary">358 турниров (14.3%) &middot; 2 891 игр &middot; 5 548 ₽ &middot; заполн. 71.0%</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="row g-0">
+            <div class="col-md-6 border-end">
+                <div class="p-2 bg-light border-bottom"><small class="fw-bold text-muted">БУДНИ</small></div>
+                <table class="table table-sm mb-0"><tbody>
+                    <tr><td class="ps-3">1. Вт 21:00 D</td><td>13 турн</td><td>61 игр</td><td>5 115 ₽</td></tr>
+                    <tr><td class="ps-3">2. Чт 21:00 D</td><td>11 турн</td><td>90 игр</td><td>5 823 ₽</td></tr>
+                    <tr><td class="ps-3">3. Вт 12:00 D</td><td>10 турн</td><td>39 игр</td><td>4 858 ₽</td></tr>
+                </tbody></table>
+            </div>
+            <div class="col-md-6">
+                <div class="p-2 bg-light border-bottom"><small class="fw-bold text-muted">ВЫХОДНЫЕ</small></div>
+                <table class="table table-sm mb-0"><tbody>
+                    <tr><td class="ps-3">1. Вс 14:00 D</td><td>15 турн</td><td>135 игр</td><td>5 850 ₽</td></tr>
+                    <tr><td class="ps-3">2. Вс 18:00 D+</td><td>13 турн</td><td>92 игр</td><td>6 131 ₽</td></tr>
+                    <tr><td class="ps-3">3. Сб 12:00 D</td><td>12 турн</td><td>110 игр</td><td>6 942 ₽</td></tr>
+                </tbody></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- #2 Buenos Padel Moscow Savelovskaya -->
+<div class="card mb-3">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <strong>#2 Buenos Padel Moscow Savelovskaya</strong>
+        <span class="badge bg-primary">263 турнира (10.5%) &middot; 1 600 игр &middot; 6 948 ₽ &middot; заполн. 60.7%</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="row g-0">
+            <div class="col-md-6 border-end">
+                <div class="p-2 bg-light border-bottom"><small class="fw-bold text-muted">БУДНИ</small></div>
+                <table class="table table-sm mb-0"><tbody>
+                    <tr><td class="ps-3">1. Ср 21:00 D</td><td>7 турн</td><td>45 игр</td><td>6 253 ₽</td></tr>
+                    <tr><td class="ps-3">2. Пн 15:00 D</td><td>7 турн</td><td>28 игр</td><td>5 443 ₽</td></tr>
+                    <tr><td class="ps-3">3. Пт 21:00 D</td><td>6 турн</td><td>33 игр</td><td>6 378 ₽</td></tr>
+                </tbody></table>
+            </div>
+            <div class="col-md-6">
+                <div class="p-2 bg-light border-bottom"><small class="fw-bold text-muted">ВЫХОДНЫЕ</small></div>
+                <table class="table table-sm mb-0"><tbody>
+                    <tr><td class="ps-3">1. Вс 10:00 C</td><td>5 турн</td><td>58 игр</td><td>11 080 ₽</td></tr>
+                    <tr><td class="ps-3">2. Вс 13:00 D</td><td>4 турн</td><td>57 игр</td><td>11 000 ₽</td></tr>
+                    <tr><td class="ps-3">3. Вс 20:00 C+</td><td>4 турн</td><td>28 игр</td><td>7 500 ₽</td></tr>
+                </tbody></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- #3 Padlhub Skolkovo -->
+<div class="card mb-3">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <strong>#3 Padlhub Skolkovo</strong>
+        <span class="badge bg-primary">193 турнира (7.7%) &middot; 1 501 игр &middot; 7 052 ₽ &middot; заполн. 55.9%</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="row g-0">
+            <div class="col-md-6 border-end">
+                <div class="p-2 bg-light border-bottom"><small class="fw-bold text-muted">БУДНИ</small></div>
+                <table class="table table-sm mb-0"><tbody>
+                    <tr><td class="ps-3">1. Пн 20:00 D+</td><td>5 турн</td><td>88 игр</td><td>5 500 ₽</td></tr>
+                    <tr><td class="ps-3">2. Вт 19:00 D+</td><td>5 турн</td><td>63 игр</td><td>5 500 ₽</td></tr>
+                    <tr><td class="ps-3">3. Пн 18:00 D</td><td>5 турн</td><td>63 игр</td><td>5 500 ₽</td></tr>
+                </tbody></table>
+            </div>
+            <div class="col-md-6">
+                <div class="p-2 bg-light border-bottom"><small class="fw-bold text-muted">ВЫХОДНЫЕ</small></div>
+                <table class="table table-sm mb-0"><tbody>
+                    <tr><td class="ps-3">1. Сб 18:00 D</td><td>9 турн</td><td>49 игр</td><td>6 722 ₽</td></tr>
+                    <tr><td class="ps-3">2. Сб 11:00 C</td><td>8 турн</td><td>96 игр</td><td>5 500 ₽</td></tr>
+                    <tr><td class="ps-3">3. Вс 18:00 D</td><td>7 турн</td><td>50 игр</td><td>5 500 ₽</td></tr>
+                </tbody></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- #4 Padlhub Terekhovo -->
+<div class="card mb-3">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <strong>#4 Padlhub Terekhovo</strong>
+        <span class="badge bg-primary">175 турниров (7.0%) &middot; 1 367 игр &middot; 6 745 ₽ &middot; заполн. 67.1%</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="row g-0">
+            <div class="col-md-6 border-end">
+                <div class="p-2 bg-light border-bottom"><small class="fw-bold text-muted">БУДНИ</small></div>
+                <table class="table table-sm mb-0"><tbody>
+                    <tr><td class="ps-3">1. Пт 21:00 D</td><td>8 турн</td><td>51 игр</td><td>5 490 ₽</td></tr>
+                    <tr><td class="ps-3">2. Пн 18:00 D</td><td>5 турн</td><td>60 игр</td><td>5 500 ₽</td></tr>
+                    <tr><td class="ps-3">3. Вт 18:00 D</td><td>5 турн</td><td>59 игр</td><td>5 500 ₽</td></tr>
+                </tbody></table>
+            </div>
+            <div class="col-md-6">
+                <div class="p-2 bg-light border-bottom"><small class="fw-bold text-muted">ВЫХОДНЫЕ</small></div>
+                <table class="table table-sm mb-0"><tbody>
+                    <tr><td class="ps-3">1. Сб 19:00 D</td><td>8 турн</td><td>75 игр</td><td>5 950 ₽</td></tr>
+                    <tr><td class="ps-3">2. Вс 12:00 D</td><td>7 турн</td><td>30 игр</td><td>7 071 ₽</td></tr>
+                    <tr><td class="ps-3">3. Вс 19:00 C</td><td>6 турн</td><td>37 игр</td><td>10 083 ₽</td></tr>
+                </tbody></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- #5 Lunda Padel DeloSport Fili -->
+<div class="card mb-3">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <strong>#5 Lunda Padel DeloSport Fili</strong>
+        <span class="badge bg-primary">139 турниров (5.6%) &middot; 1 056 игр &middot; 6 786 ₽ &middot; заполн. 70.3%</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="row g-0">
+            <div class="col-md-6 border-end">
+                <div class="p-2 bg-light border-bottom"><small class="fw-bold text-muted">БУДНИ</small></div>
+                <table class="table table-sm mb-0"><tbody>
+                    <tr><td class="ps-3">1. Пт 19:00 D+</td><td>5 турн</td><td>28 игр</td><td>8 000 ₽</td></tr>
+                    <tr><td class="ps-3">2. Чт 13:00 D</td><td>4 турн</td><td>37 игр</td><td>5 000 ₽</td></tr>
+                    <tr><td class="ps-3">3. Пн 13:00 D</td><td>4 турн</td><td>32 игр</td><td>5 000 ₽</td></tr>
+                </tbody></table>
+            </div>
+            <div class="col-md-6">
+                <div class="p-2 bg-light border-bottom"><small class="fw-bold text-muted">ВЫХОДНЫЕ</small></div>
+                <table class="table table-sm mb-0"><tbody>
+                    <tr><td class="ps-3">1. Сб 07:00 D</td><td>8 турн</td><td>69 игр</td><td>4 950 ₽</td></tr>
+                    <tr><td class="ps-3">2. Вс 07:00 D</td><td>8 турн</td><td>53 игр</td><td>4 950 ₽</td></tr>
+                    <tr><td class="ps-3">3. Вс 10:00 C</td><td>6 турн</td><td>40 игр</td><td>10 983 ₽</td></tr>
+                </tbody></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- #6 PARI Padel 8 Marta -->
+<div class="card mb-3">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <strong>#6 PARI Padel 8 Marta</strong>
+        <span class="badge bg-success">124 турнира (5.0%) &middot; 1 127 игр &middot; 7 228 ₽ &middot; заполн. 82.8%</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="row g-0">
+            <div class="col-md-6 border-end">
+                <div class="p-2 bg-light border-bottom"><small class="fw-bold text-muted">БУДНИ</small></div>
+                <table class="table table-sm mb-0"><tbody>
+                    <tr><td class="ps-3">1. Пн 18:00 D</td><td>5 турн</td><td>42 игр</td><td>6 490 ₽</td></tr>
+                    <tr><td class="ps-3">2. Пт 18:00 D</td><td>4 турн</td><td>52 игр</td><td>6 500 ₽</td></tr>
+                    <tr><td class="ps-3">3. Чт 18:00 C</td><td>4 турн</td><td>48 игр</td><td>6 500 ₽</td></tr>
+                </tbody></table>
+            </div>
+            <div class="col-md-6">
+                <div class="p-2 bg-light border-bottom"><small class="fw-bold text-muted">ВЫХОДНЫЕ</small></div>
+                <table class="table table-sm mb-0"><tbody>
+                    <tr><td class="ps-3">1. Вс 20:00 C+</td><td>4 турн</td><td>43 игр</td><td>9 600 ₽</td></tr>
+                    <tr><td class="ps-3">2. Вс 18:00 D</td><td>3 турн</td><td>37 игр</td><td>6 600 ₽</td></tr>
+                    <tr><td class="ps-3">3. Сб 07:00 D</td><td>3 турн</td><td>35 игр</td><td>3 167 ₽</td></tr>
+                </tbody></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- #7 Sky Padel -->
+<div class="card mb-3">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <strong>#7 Sky Padel</strong>
+        <span class="badge bg-primary">111 турниров (4.4%) &middot; 729 игр &middot; 8 682 ₽ &middot; заполн. 66.3%</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="row g-0">
+            <div class="col-md-6 border-end">
+                <div class="p-2 bg-light border-bottom"><small class="fw-bold text-muted">БУДНИ</small></div>
+                <table class="table table-sm mb-0"><tbody>
+                    <tr><td class="ps-3">1. Ср 12:00 D</td><td>6 турн</td><td>51 игр</td><td>7 417 ₽</td></tr>
+                    <tr><td class="ps-3">2. Пт 19:00 D+</td><td>5 турн</td><td>46 игр</td><td>11 320 ₽</td></tr>
+                    <tr><td class="ps-3">3. Пт 12:00 D</td><td>4 турн</td><td>40 игр</td><td>7 800 ₽</td></tr>
+                </tbody></table>
+            </div>
+            <div class="col-md-6">
+                <div class="p-2 bg-light border-bottom"><small class="fw-bold text-muted">ВЫХОДНЫЕ</small></div>
+                <table class="table table-sm mb-0"><tbody>
+                    <tr><td class="ps-3">1. Сб 15:00 D</td><td>6 турн</td><td>54 игр</td><td>6 900 ₽</td></tr>
+                    <tr><td class="ps-3">2. Сб 13:00 D+</td><td>5 турн</td><td>57 игр</td><td>14 840 ₽</td></tr>
+                    <tr><td class="ps-3">3. Сб 16:00 C</td><td>5 турн</td><td>31 игр</td><td>7 220 ₽</td></tr>
+                </tbody></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- #8 Padlhub Yasenevo -->
+<div class="card mb-3">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <strong>#8 Padlhub Yasenevo</strong>
+        <span class="badge bg-success">108 турниров (4.3%) &middot; 962 игр &middot; 4 407 ₽ &middot; заполн. 74.6%</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="row g-0">
+            <div class="col-md-6 border-end">
+                <div class="p-2 bg-light border-bottom"><small class="fw-bold text-muted">БУДНИ</small></div>
+                <table class="table table-sm mb-0"><tbody>
+                    <tr><td class="ps-3">1. Вт 21:00 D+</td><td>6 турн</td><td>47 игр</td><td>6 417 ₽</td></tr>
+                    <tr><td class="ps-3">2. Пн 19:00 D+</td><td>5 турн</td><td>59 игр</td><td>6 300 ₽</td></tr>
+                    <tr><td class="ps-3">3. Ср 19:00 D+</td><td>4 турн</td><td>44 игр</td><td>3 500 ₽</td></tr>
+                </tbody></table>
+            </div>
+            <div class="col-md-6">
+                <div class="p-2 bg-light border-bottom"><small class="fw-bold text-muted">ВЫХОДНЫЕ</small></div>
+                <table class="table table-sm mb-0"><tbody>
+                    <tr><td class="ps-3">1. Вс 12:00 D</td><td>6 турн</td><td>60 игр</td><td>3 500 ₽</td></tr>
+                    <tr><td class="ps-3">2. Сб 12:00 D</td><td>5 турн</td><td>48 игр</td><td>3 500 ₽</td></tr>
+                    <tr><td class="ps-3">3. Вс 18:00 D+</td><td>5 турн</td><td>42 игр</td><td>5 600 ₽</td></tr>
+                </tbody></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- #9 Lunda Padel Rechnoy -->
+<div class="card mb-3">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <strong>#9 Lunda Padel Rechnoy</strong>
+        <span class="badge bg-success">99 турниров (4.0%) &middot; 896 игр &middot; 5 116 ₽ &middot; заполн. 79.0%</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="row g-0">
+            <div class="col-md-6 border-end">
+                <div class="p-2 bg-light border-bottom"><small class="fw-bold text-muted">БУДНИ</small></div>
+                <table class="table table-sm mb-0"><tbody>
+                    <tr><td class="ps-3">1. Вт 10:00 D</td><td>5 турн</td><td>50 игр</td><td>4 000 ₽</td></tr>
+                    <tr><td class="ps-3">2. Вт 20:00 C</td><td>5 турн</td><td>47 игр</td><td>4 300 ₽</td></tr>
+                    <tr><td class="ps-3">3. Пн 20:00 B</td><td>5 турн</td><td>46 игр</td><td>4 000 ₽</td></tr>
+                </tbody></table>
+            </div>
+            <div class="col-md-6">
+                <div class="p-2 bg-light border-bottom"><small class="fw-bold text-muted">ВЫХОДНЫЕ</small></div>
+                <table class="table table-sm mb-0"><tbody>
+                    <tr><td class="ps-3">1. Вс 12:00 D</td><td>5 турн</td><td>59 игр</td><td>4 000 ₽</td></tr>
+                    <tr><td class="ps-3">2. Вс 20:00 D+</td><td>5 турн</td><td>58 игр</td><td>9 600 ₽</td></tr>
+                    <tr><td class="ps-3">3. Вс 14:00 C</td><td>5 турн</td><td>51 игр</td><td>4 000 ₽</td></tr>
+                </tbody></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- #10 Padlhub Nagatinskaya -->
+<div class="card mb-3">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <strong>#10 Padlhub Nagatinskaya</strong>
+        <span class="badge bg-danger">95 турниров (3.8%) &middot; 397 игр &middot; 6 999 ₽ &middot; заполн. 34.3%</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="row g-0">
+            <div class="col-md-6 border-end">
+                <div class="p-2 bg-light border-bottom"><small class="fw-bold text-muted">БУДНИ</small></div>
+                <table class="table table-sm mb-0"><tbody>
+                    <tr><td class="ps-3">1. Пн 19:00 D+</td><td>10 турн</td><td>21 игр</td><td>8 250 ₽</td></tr>
+                    <tr><td class="ps-3">2. Ср 20:00 D+</td><td>8 турн</td><td>30 игр</td><td>8 250 ₽</td></tr>
+                    <tr><td class="ps-3">3. Пн 19:00 C</td><td>6 турн</td><td>10 игр</td><td>7 333 ₽</td></tr>
+                </tbody></table>
+            </div>
+            <div class="col-md-6">
+                <div class="p-2 bg-light border-bottom"><small class="fw-bold text-muted">ВЫХОДНЫЕ</small></div>
+                <table class="table table-sm mb-0"><tbody>
+                    <tr><td class="ps-3">1. Вс 12:00 D+</td><td>4 турн</td><td>39 игр</td><td>5 600 ₽</td></tr>
+                    <tr><td class="ps-3">2. Сб 18:00 D+</td><td>3 турн</td><td>22 игр</td><td>11 000 ₽</td></tr>
+                    <tr><td class="ps-3">3. Вс 10:00 D</td><td>2 турн</td><td>22 игр</td><td>4 575 ₽</td></tr>
+                </tbody></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- #11 Padel Land -->
+<div class="card mb-3">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <strong>#11 Padel Land</strong>
+        <span class="badge bg-success">90 турниров (3.6%) &middot; 1 122 игр &middot; 4 676 ₽ &middot; заполн. 86.4%</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="row g-0">
+            <div class="col-md-6 border-end">
+                <div class="p-2 bg-light border-bottom"><small class="fw-bold text-muted">БУДНИ</small></div>
+                <table class="table table-sm mb-0"><tbody>
+                    <tr><td class="ps-3">1. Пн 20:00 D</td><td>6 турн</td><td>58 игр</td><td>2 900 ₽</td></tr>
+                    <tr><td class="ps-3">2. Ср 21:00 C</td><td>4 турн</td><td>64 игр</td><td>3 975 ₽</td></tr>
+                    <tr><td class="ps-3">3. Чт 19:00 D+</td><td>4 турн</td><td>45 игр</td><td>5 500 ₽</td></tr>
+                </tbody></table>
+            </div>
+            <div class="col-md-6">
+                <div class="p-2 bg-light border-bottom"><small class="fw-bold text-muted">ВЫХОДНЫЕ</small></div>
+                <table class="table table-sm mb-0"><tbody>
+                    <tr><td class="ps-3">1. Вс 11:00 C</td><td>4 турн</td><td>47 игр</td><td>7 875 ₽</td></tr>
+                    <tr><td class="ps-3">2. Сб 20:00 D</td><td>3 турн</td><td>63 игр</td><td>3 900 ₽</td></tr>
+                    <tr><td class="ps-3">3. Сб 18:00 C</td><td>3 турн</td><td>56 игр</td><td>5 500 ₽</td></tr>
+                </tbody></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- #12 Padel NOK -->
+<div class="card mb-3">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <strong>#12 Padel NOK</strong>
+        <span class="badge bg-primary">78 турниров (3.1%) &middot; 578 игр &middot; 6 626 ₽ &middot; заполн. 67.4%</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="row g-0">
+            <div class="col-md-6 border-end">
+                <div class="p-2 bg-light border-bottom"><small class="fw-bold text-muted">БУДНИ</small></div>
+                <table class="table table-sm mb-0"><tbody>
+                    <tr><td class="ps-3">1. Пн 19:00 D</td><td>8 турн</td><td>44 игр</td><td>8 288 ₽</td></tr>
+                    <tr><td class="ps-3">2. Вт 21:00 D+</td><td>7 турн</td><td>48 игр</td><td>8 329 ₽</td></tr>
+                    <tr><td class="ps-3">3. Ср 21:00 D</td><td>6 турн</td><td>29 игр</td><td>6 350 ₽</td></tr>
+                </tbody></table>
+            </div>
+            <div class="col-md-6">
+                <div class="p-2 bg-light border-bottom"><small class="fw-bold text-muted">ВЫХОДНЫЕ</small></div>
+                <table class="table table-sm mb-0"><tbody>
+                    <tr><td class="ps-3">1. Вс 15:00 D</td><td>5 турн</td><td>51 игр</td><td>4 600 ₽</td></tr>
+                    <tr><td class="ps-3">2. Сб 18:00 D+</td><td>3 турн</td><td>34 игр</td><td>12 600 ₽</td></tr>
+                    <tr><td class="ps-3">3. Сб 19:00 D+</td><td>1 турн</td><td>9 игр</td><td>12 600 ₽</td></tr>
+                </tbody></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- #13 Nevel Padel Club -->
+<div class="card mb-3">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <strong>#13 Nevel Padel Club</strong>
+        <span class="badge bg-danger">73 турнира (2.9%) &middot; 314 игр &middot; 6 301 ₽ &middot; заполн. 40.6%</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="row g-0">
+            <div class="col-md-6 border-end">
+                <div class="p-2 bg-light border-bottom"><small class="fw-bold text-muted">БУДНИ</small></div>
+                <table class="table table-sm mb-0"><tbody>
+                    <tr><td class="ps-3">1. Пн 13:00 D</td><td>5 турн</td><td>9 игр</td><td>4 500 ₽</td></tr>
+                    <tr><td class="ps-3">2. Ср 07:00 D</td><td>3 турн</td><td>3 игр</td><td>4 500 ₽</td></tr>
+                    <tr><td class="ps-3">3. Пн 21:00 D</td><td>3 турн</td><td>2 игр</td><td>5 500 ₽</td></tr>
+                </tbody></table>
+            </div>
+            <div class="col-md-6">
+                <div class="p-2 bg-light border-bottom"><small class="fw-bold text-muted">ВЫХОДНЫЕ</small></div>
+                <table class="table table-sm mb-0"><tbody>
+                    <tr><td class="ps-3">1. Вс 12:00 D</td><td>3 турн</td><td>36 игр</td><td>4 500 ₽</td></tr>
+                    <tr><td class="ps-3">2. Сб 14:00 C</td><td>3 турн</td><td>28 игр</td><td>9 000 ₽</td></tr>
+                    <tr><td class="ps-3">3. Сб 12:00 C+</td><td>3 турн</td><td>0 игр</td><td>9 500 ₽</td></tr>
+                </tbody></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- #14 Padlhub Nagatinskaya Premium -->
+<div class="card mb-3">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <strong>#14 Padlhub Nagatinskaya Premium</strong>
+        <span class="badge bg-primary">60 турниров (2.4%) &middot; 320 игр &middot; 5 660 ₽ &middot; заполн. 55.3%</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="row g-0">
+            <div class="col-md-6 border-end">
+                <div class="p-2 bg-light border-bottom"><small class="fw-bold text-muted">БУДНИ</small></div>
+                <table class="table table-sm mb-0"><tbody>
+                    <tr><td class="ps-3">1. Чт 12:00 D+</td><td>4 турн</td><td>34 игр</td><td>4 000 ₽</td></tr>
+                    <tr><td class="ps-3">2. Пт 12:00 D+</td><td>4 турн</td><td>29 игр</td><td>4 000 ₽</td></tr>
+                    <tr><td class="ps-3">3. Вт 20:00 D+</td><td>4 турн</td><td>24 игр</td><td>5 125 ₽</td></tr>
+                </tbody></table>
+            </div>
+            <div class="col-md-6">
+                <div class="p-2 bg-light border-bottom"><small class="fw-bold text-muted">ВЫХОДНЫЕ</small></div>
+                <table class="table table-sm mb-0"><tbody>
+                    <tr><td class="ps-3">1. Вс 16:00 D</td><td>5 турн</td><td>36 игр</td><td>5 490 ₽</td></tr>
+                    <tr><td class="ps-3">2. Сб 12:00 D+</td><td>5 турн</td><td>28 игр</td><td>8 800 ₽</td></tr>
+                    <tr><td class="ps-3">3. Вс 18:00 D+</td><td>4 турн</td><td>5 игр</td><td>6 875 ₽</td></tr>
+                </tbody></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- #15 PADEL TIME SLAVA -->
+<div class="card mb-3">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <strong>#15 PADEL TIME SLAVA</strong>
+        <span class="badge bg-success">51 турнир (2.0%) &middot; 463 игр &middot; 4 543 ₽ &middot; заполн. 81.9%</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="row g-0">
+            <div class="col-md-6 border-end">
+                <div class="p-2 bg-light border-bottom"><small class="fw-bold text-muted">БУДНИ</small></div>
+                <table class="table table-sm mb-0"><tbody>
+                    <tr><td class="ps-3">1. Вт 20:00 D</td><td>5 турн</td><td>57 игр</td><td>3 580 ₽</td></tr>
+                    <tr><td class="ps-3">2. Ср 21:00 C</td><td>4 турн</td><td>46 игр</td><td>6 500 ₽</td></tr>
+                    <tr><td class="ps-3">3. Чт 12:00 D+</td><td>4 турн</td><td>44 игр</td><td>2 900 ₽</td></tr>
+                </tbody></table>
+            </div>
+            <div class="col-md-6">
+                <div class="p-2 bg-light border-bottom"><small class="fw-bold text-muted">ВЫХОДНЫЕ</small></div>
+                <table class="table table-sm mb-0"><tbody>
+                    <tr><td class="ps-3">1. Вс 14:00 D+</td><td>6 турн</td><td>48 игр</td><td>5 267 ₽</td></tr>
+                    <tr><td class="ps-3">2. Вс 16:00 D</td><td>4 турн</td><td>40 игр</td><td>3 900 ₽</td></tr>
+                    <tr><td class="ps-3">3. Вс 12:00 D</td><td>3 турн</td><td>21 игр</td><td>3 200 ₽</td></tr>
+                </tbody></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- #16 Padel Park -->
+<div class="card mb-3">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <strong>#16 Padel Park</strong>
+        <span class="badge bg-primary">48 турниров (1.9%) &middot; 386 игр &middot; 3 558 ₽ &middot; заполн. 69.2%</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="row g-0">
+            <div class="col-md-6 border-end">
+                <div class="p-2 bg-light border-bottom"><small class="fw-bold text-muted">БУДНИ</small></div>
+                <table class="table table-sm mb-0"><tbody>
+                    <tr><td class="ps-3">1. Чт 12:00 D</td><td>5 турн</td><td>48 игр</td><td>2 500 ₽</td></tr>
+                    <tr><td class="ps-3">2. Ср 08:00 C</td><td>5 турн</td><td>47 игр</td><td>2 180 ₽</td></tr>
+                    <tr><td class="ps-3">3. Пт 21:00 C</td><td>5 турн</td><td>26 игр</td><td>6 000 ₽</td></tr>
+                </tbody></table>
+            </div>
+            <div class="col-md-6">
+                <div class="p-2 bg-light border-bottom"><small class="fw-bold text-muted">ВЫХОДНЫЕ</small></div>
+                <table class="table table-sm mb-0"><tbody>
+                    <tr><td class="ps-3">1. Вс 12:00 D</td><td>5 турн</td><td>50 игр</td><td>3 600 ₽</td></tr>
+                    <tr><td class="ps-3">2. Сб 12:00 D</td><td>4 турн</td><td>52 игр</td><td>3 500 ₽</td></tr>
+                    <tr><td class="ps-3">3. Сб 20:00 D</td><td>1 турн</td><td>12 игр</td><td>2 500 ₽</td></tr>
+                </tbody></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- #17 ZVI padel club -->
+<div class="card mb-3">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <strong>#17 ZVI padel club</strong>
+        <span class="badge bg-danger">46 турниров (1.8%) &middot; 246 игр &middot; 6 912 ₽ &middot; заполн. 51.6%</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="row g-0">
+            <div class="col-md-6 border-end">
+                <div class="p-2 bg-light border-bottom"><small class="fw-bold text-muted">БУДНИ</small></div>
+                <table class="table table-sm mb-0"><tbody>
+                    <tr><td class="ps-3">1. Ср 20:00 D</td><td>6 турн</td><td>49 игр</td><td>5 490 ₽</td></tr>
+                    <tr><td class="ps-3">2. Пт 19:00 D</td><td>4 турн</td><td>12 игр</td><td>5 490 ₽</td></tr>
+                    <tr><td class="ps-3">3. Пт 19:00 D+</td><td>4 турн</td><td>8 игр</td><td>5 490 ₽</td></tr>
+                </tbody></table>
+            </div>
+            <div class="col-md-6">
+                <div class="p-2 bg-light border-bottom"><small class="fw-bold text-muted">ВЫХОДНЫЕ</small></div>
+                <table class="table table-sm mb-0"><tbody>
+                    <tr><td class="ps-3">1. Сб 16:00 D</td><td>3 турн</td><td>7 игр</td><td>8 793 ₽</td></tr>
+                    <tr><td class="ps-3">2. Сб 15:00 D</td><td>2 турн</td><td>16 игр</td><td>5 490 ₽</td></tr>
+                    <tr><td class="ps-3">3. Вс 16:00 D</td><td>2 турн</td><td>8 игр</td><td>5 690 ₽</td></tr>
+                </tbody></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- #18 UP2 PADEL -->
+<div class="card mb-3">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <strong>#18 UP2 PADEL</strong>
+        <span class="badge bg-danger">39 турниров (1.6%) &middot; 144 игр &middot; 4 418 ₽ &middot; заполн. 37.3%</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="row g-0">
+            <div class="col-md-6 border-end">
+                <div class="p-2 bg-light border-bottom"><small class="fw-bold text-muted">БУДНИ</small></div>
+                <table class="table table-sm mb-0"><tbody>
+                    <tr><td class="ps-3">1. Ср 16:00 D</td><td>1 турн</td><td>11 игр</td><td>3 000 ₽</td></tr>
+                    <tr><td class="ps-3">2. Пт 21:00 D</td><td>1 турн</td><td>8 игр</td><td>3 500 ₽</td></tr>
+                    <tr><td class="ps-3">3. Ср 12:00 D</td><td>1 турн</td><td>7 игр</td><td>3 000 ₽</td></tr>
+                </tbody></table>
+            </div>
+            <div class="col-md-6">
+                <div class="p-2 bg-light border-bottom"><small class="fw-bold text-muted">ВЫХОДНЫЕ</small></div>
+                <table class="table table-sm mb-0"><tbody>
+                    <tr><td class="ps-3">1. Сб 14:00 D</td><td>2 турн</td><td>14 игр</td><td>3 250 ₽</td></tr>
+                    <tr><td class="ps-3">2. Сб 19:00 D</td><td>2 турн</td><td>10 игр</td><td>4 000 ₽</td></tr>
+                    <tr><td class="ps-3">3. Сб 11:00 D</td><td>2 турн</td><td>10 игр</td><td>5 750 ₽</td></tr>
+                </tbody></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- #19 Padel Battle | Zelenograd -->
+<div class="card mb-3">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <strong>#19 Padel Battle | Zelenograd</strong>
+        <span class="badge bg-primary">39 турниров (1.6%) &middot; 337 игр &middot; 4 218 ₽ &middot; заполн. 64.5%</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="row g-0">
+            <div class="col-md-6 border-end">
+                <div class="p-2 bg-light border-bottom"><small class="fw-bold text-muted">БУДНИ</small></div>
+                <table class="table table-sm mb-0"><tbody>
+                    <tr><td class="ps-3">1. Пт 20:00 D</td><td>3 турн</td><td>25 игр</td><td>4 000 ₽</td></tr>
+                    <tr><td class="ps-3">2. Ср 20:00 D</td><td>3 турн</td><td>1 игр</td><td>4 000 ₽</td></tr>
+                    <tr><td class="ps-3">3. Пн 13:00 D+</td><td>2 турн</td><td>32 игр</td><td>2 000 ₽</td></tr>
+                </tbody></table>
+            </div>
+            <div class="col-md-6">
+                <div class="p-2 bg-light border-bottom"><small class="fw-bold text-muted">ВЫХОДНЫЕ</small></div>
+                <table class="table table-sm mb-0"><tbody>
+                    <tr><td class="ps-3">1. Вс 14:00 D</td><td>4 турн</td><td>49 игр</td><td>5 875 ₽</td></tr>
+                    <tr><td class="ps-3">2. Сб 11:00 D+</td><td>3 турн</td><td>48 игр</td><td>6 583 ₽</td></tr>
+                    <tr><td class="ps-3">3. Сб 14:00 D</td><td>3 турн</td><td>36 игр</td><td>3 750 ₽</td></tr>
+                </tbody></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- #20 Padel Club Zhukovka -->
+<div class="card mb-3">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <strong>#20 Padel Club Zhukovka</strong>
+        <span class="badge bg-primary">38 турниров (1.5%) &middot; 191 игр &middot; 5 105 ₽ &middot; заполн. 55.5%</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="row g-0">
+            <div class="col-md-6 border-end">
+                <div class="p-2 bg-light border-bottom"><small class="fw-bold text-muted">БУДНИ</small></div>
+                <table class="table table-sm mb-0"><tbody>
+                    <tr><td class="ps-3">1. Ср 11:00 D</td><td>4 турн</td><td>31 игр</td><td>4 000 ₽</td></tr>
+                    <tr><td class="ps-3">2. Пн 20:00 D+</td><td>4 турн</td><td>14 игр</td><td>6 250 ₽</td></tr>
+                    <tr><td class="ps-3">3. Пн 11:00 D+</td><td>3 турн</td><td>19 игр</td><td>4 000 ₽</td></tr>
+                </tbody></table>
+            </div>
+            <div class="col-md-6">
+                <div class="p-2 bg-light border-bottom"><small class="fw-bold text-muted">ВЫХОДНЫЕ</small></div>
+                <table class="table table-sm mb-0"><tbody>
+                    <tr><td class="ps-3">1. Сб 11:00 D</td><td>1 турн</td><td>8 игр</td><td>4 000 ₽</td></tr>
+                    <tr><td class="ps-3">2. Сб 20:00 D+</td><td>1 турн</td><td>2 игр</td><td>4 000 ₽</td></tr>
+                </tbody></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== ВЫВОДЫ ==================== -->
+<h4 class="mt-5 mb-3">Ключевые выводы</h4>
+<div class="card border-dark mb-4">
+    <div class="card-body">
+        <ol>
+            <li class="mb-2"><strong>Рынок растёт:</strong> от 500 до 655 турниров в неделю (+30% за месяц). Количество организаторов выросло с 105 до 133. Конкуренция нарастает.</li>
+            <li class="mb-2"><strong>Топ-5 клубов держат 45% рынка:</strong> First Padel Club (14.3%), Buenos (10.5%), Skolkovo (7.7%), Terekhovo (7.0%), DeloSport Fili (5.6%). Остальные 37 клубов делят 55%.</li>
+            <li class="mb-2"><strong>Цена решает:</strong> Сегмент 3 000–5 000 ₽ показывает лучшую заполняемость (72–81%). При цене выше 6 000 ₽ заполняемость падает до 59–61%. Лидеры по заполняемости (Padel A33, Padel Land, V-PADEL) держат цены ниже 5 000 ₽.</li>
+            <li class="mb-2"><strong>Грейд B — дефицит:</strong> Всего 27 турниров, но заполняемость 84.9%. Ниша для роста — опытных игроков не хватает турниров.</li>
+            <li class="mb-2"><strong>Nagatinskaya — проблемная площадка:</strong> 95 турниров, но заполняемость всего 34.3% при средней цене 7 000 ₽. В будни — 10 турниров по Пн 19:00 D+, но только 21 игрок (2.1 на турнир). Возможная причина: завышенные цены + слабая локация.</li>
+            <li class="mb-2"><strong>Лучшее время:</strong> 11:00 (80.7% заполн.) и 15:00 (74.7%). Самые загруженные, но не самые заполненные: 12:00 и 19:00.</li>
+            <li class="mb-2"><strong>Четверг — лучший будний день</strong> (68.1% заполн.), понедельник — худший (62.7%).</li>
+        </ol>
+    </div>
+</div>
+
+<!-- Sortable tables JS -->
+<script>
+(function() {
+    document.querySelectorAll('.sortable-table').forEach(table => {
+        const headers = table.querySelectorAll('th.sortable');
+        headers.forEach(th => {
+            th.addEventListener('click', function() {
+                const colIdx = parseInt(this.dataset.col);
+                const tbody = table.querySelector('tbody');
+                const rows = Array.from(tbody.querySelectorAll('tr'));
+                const arrow = this.querySelector('.sort-arrow');
+                const currentDir = this.dataset.sortDir || '';
+                const newDir = currentDir === 'asc' ? 'desc' : 'asc';
+                table.querySelectorAll('th.sortable').forEach(h => {
+                    h.dataset.sortDir = '';
+                    h.querySelector('.sort-arrow').innerHTML = '&#8597;';
+                    h.querySelector('.sort-arrow').className = 'sort-arrow text-muted';
+                });
+                this.dataset.sortDir = newDir;
+                arrow.innerHTML = newDir === 'asc' ? '&#9650;' : '&#9660;';
+                arrow.className = 'sort-arrow text-primary';
+                rows.sort((a, b) => {
+                    const cellA = a.cells[colIdx];
+                    const cellB = b.cells[colIdx];
+                    let valA = cellA.dataset.sort !== undefined ? cellA.dataset.sort : cellA.textContent.trim();
+                    let valB = cellB.dataset.sort !== undefined ? cellB.dataset.sort : cellB.textContent.trim();
+                    const numA = parseFloat(valA);
+                    const numB = parseFloat(valB);
+                    if (!isNaN(numA) && !isNaN(numB)) {
+                        return newDir === 'asc' ? numA - numB : numB - numA;
+                    }
+                    return newDir === 'asc' ? valA.localeCompare(valB, 'ru') : valB.localeCompare(valA, 'ru');
+                });
+                rows.forEach((row, i) => { tbody.appendChild(row); });
+            });
+        });
+    });
+})();
+</script>
+{% endblock %}
